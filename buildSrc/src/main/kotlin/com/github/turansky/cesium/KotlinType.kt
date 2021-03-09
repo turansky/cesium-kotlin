@@ -4,6 +4,7 @@ private val CLASS_REGEX = Regex("""[\w\d]+""")
 
 private val STANDARD_TYPE_MAP = mapOf(
     "any" to "Any",
+    "object" to "Any",
 
     "boolean" to "Boolean",
     "number" to "Double",
@@ -18,7 +19,11 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "ArrayBuffer" to "org.khronos.webgl.ArrayBuffer",
     "Uint8Array" to "org.khronos.webgl.Uint8Array",
-    "Float32Array" to "org.khronos.webgl.Float32Array"
+    "Float32Array" to "org.khronos.webgl.Float32Array",
+
+    "CameraEventType | any[] | undefined" to "CameraEventType?",
+    "any[] | GeometryInstance" to "GeometryInstance",
+    "GeometryInstance[] | GeometryInstance" to "Array<out GeometryInstance>"
 )
 
 internal fun kotlinType(
