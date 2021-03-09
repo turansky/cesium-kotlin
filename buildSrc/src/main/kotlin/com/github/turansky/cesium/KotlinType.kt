@@ -34,5 +34,8 @@ internal fun kotlinType(
     if (CLASS_REGEX.matches(type) && type.get(0) == type.get(0).toUpperCase())
         return type
 
+    if (type.endsWith(" | undefined") && type.indexOf("|") == type.lastIndexOf("|"))
+        return kotlinType(type.removeSuffix(" | undefined")) + "?"
+
     return "dynamic"
 }
