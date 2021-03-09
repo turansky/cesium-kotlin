@@ -24,6 +24,7 @@ private val STANDARD_TYPE_MAP = mapOf(
 internal fun kotlinType(
     type: String
 ): String {
+    // TODO: use interface
     if (type == "InterpolationAlgorithm")
         return "dynamic"
 
