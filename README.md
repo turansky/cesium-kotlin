@@ -1,2 +1,1 @@
-# cesium-kotlin
-Kotlin/JS declarations generator for Cesium
+# Kotlin/JS support for Cesium
