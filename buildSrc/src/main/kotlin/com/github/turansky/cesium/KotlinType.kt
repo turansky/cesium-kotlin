@@ -49,5 +49,7 @@ internal fun kotlinType(
     if (promiseResult != type)
         return "kotlin.js.Promise<${kotlinType(promiseResult)}>"
 
+    // TODO: add aliases support
+
     return "dynamic"
 }
