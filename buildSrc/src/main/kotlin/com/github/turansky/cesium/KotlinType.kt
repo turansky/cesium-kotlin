@@ -25,7 +25,7 @@ internal fun kotlinType(
     type: String
 ): String {
     // TODO: use interface
-    if (type == "InterpolationAlgorithm")
+    if (type == "InterpolationAlgorithm" || type == "Packable")
         return "dynamic"
 
     if (STANDARD_TYPE_MAP.containsKey(type))
@@ -36,6 +36,9 @@ internal fun kotlinType(
 
     if (type.endsWith(" | undefined") && type.indexOf("|") == type.lastIndexOf("|"))
         return kotlinType(type.removeSuffix(" | undefined")) + "?"
+
+    if (type.endsWith("[]") && "|" !in type)
+        return "Array<out ${kotlinType(type.removeSuffix("[]"))}>"
 
     return "dynamic"
 }
