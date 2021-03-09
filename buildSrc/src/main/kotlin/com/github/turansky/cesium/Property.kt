@@ -11,9 +11,11 @@ internal class Property(
     val static = "static" in modifiers
     val readOnly = "readonly" in modifiers
 
+    val type = kotlinType(source.body.substringAfter(": "))
+
     override fun toCode(): String {
         return source.doc + "\n" +
                 (if (readOnly) "val" else "var") +
-                " $name: dynamic"
+                " $name: $type"
     }
 }
