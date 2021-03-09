@@ -1,6 +1,8 @@
 .gradle/
 build/
 
+cesium-kotlin/src/
+
 # IDEA ignore list
 .idea/*
 !.idea/icon.png
