@@ -24,7 +24,7 @@ internal fun generateKotlinDeclarations(
         .replace("\n}/**", "\n}\n\n/**")
         .removePrefix("""declare module "cesium" {""")
         .substringBefore("\n\n\n\n}")
-        .split("\n\n/**")
+        .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .asSequence()
         .map { "/**$it" }

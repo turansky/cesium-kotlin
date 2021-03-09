@@ -8,5 +8,9 @@ internal abstract class Declaration {
     }
 
     fun toCode(): String =
-        source.doc + "\n\n" + source.body
+        "package cesium\n\n" +
+                source.doc + "\n\n" + toCodeBody()
+
+    open fun toCodeBody(): String =
+        source.body
 }
