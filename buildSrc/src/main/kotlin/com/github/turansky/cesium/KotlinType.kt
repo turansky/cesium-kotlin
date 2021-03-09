@@ -40,5 +40,9 @@ internal fun kotlinType(
     if (type.endsWith("[]") && "|" !in type)
         return "Array<out ${kotlinType(type.removeSuffix("[]"))}>"
 
+    val promiseResult = type.removeSurrounding("Promise<", ">")
+    if (promiseResult != type)
+        return "kotlin.js.Promise<${kotlinType(promiseResult)}>"
+
     return "dynamic"
 }
