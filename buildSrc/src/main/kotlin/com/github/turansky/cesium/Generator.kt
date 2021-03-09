@@ -38,14 +38,17 @@ internal fun generateKotlinDeclarations(
             val newSource = source.copy(body = body.removePrefix(prefix))
             FACTORY_MAP.getValue(prefix)(newSource)
         }
-        .sortedBy(Declaration::name)
+        .sortedBy(Declaration::fileName)
         .forEachIndexed { index, declaration ->
             val id = index.toString()
                 .let { "0".repeat(3 - it.length) + it }
 
             val name = when (declaration) {
-                is Enum -> "${declaration.name}.kt"
-                else -> "${id}_${declaration.name}.kt_"
+                is Enum,
+                is Class
+                -> "${declaration.fileName}.kt"
+
+                else -> "${id}_${declaration.fileName}.kt_"
             }
 
             cesiumDir.resolve(name)
