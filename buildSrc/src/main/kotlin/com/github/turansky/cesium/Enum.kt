@@ -3,20 +3,41 @@ package com.github.turansky.cesium
 internal class Enum(
     override val source: Definition
 ) : Declaration() {
-    override fun toCodeBody(): String {
+    override fun toCode(): String {
         val body = source.body
-            .substringAfter("\n")
+            .substringAfter("\n    ")
             .removeSuffix("}")
-            .split(Regex(""" = \d+,\n\s+"""))
+            .replace(",\n     *", "__COMMA__\n     *")
+            .split(Regex(""",\n\s+"""))
+            .asSequence()
+            .map { it.replace("__COMMA__\n", ",\n") }
             .map { parseTopDefinition(it) }
+            .map { EnumConstant(it) }
             .joinToString(separator = ",\n\n", postfix = ",\n\n;\n") {
-                "${it.doc}\n${it.body}"
+                it.toCode()
             }
 
-        return "enum class $name {\n\n$body\n}"
+        return DEFAULT_PACKAGE +
+                source.doc +
+                "\n\n" +
+                "enum class $name {\n\n$body\n}"
     }
 
     companion object {
         const val PREFIX = "export enum "
+    }
+}
+
+// TODO: describe value in comments
+internal class EnumConstant(
+    override val source: Definition
+) : Declaration() {
+    override fun toCode(): String {
+        val name = source.body.split(" = ")[0]
+        return if (source.doc.isNotBlank()) {
+            "${source.doc}\n${name}"
+        } else {
+            name
+        }
     }
 }

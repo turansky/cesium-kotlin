@@ -7,10 +7,6 @@ internal abstract class Declaration {
         source.body.substringBefore(" ")
     }
 
-    fun toCode(): String =
-        "package cesium\n\n" +
-                source.doc + "\n\n" + toCodeBody()
-
-    open fun toCodeBody(): String =
-        source.body
+    open fun toCode(): String =
+        source.doc + "\n\n" + source.body
 }

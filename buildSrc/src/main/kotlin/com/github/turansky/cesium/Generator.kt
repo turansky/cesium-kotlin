@@ -43,7 +43,12 @@ internal fun generateKotlinDeclarations(
             val id = index.toString()
                 .let { "0".repeat(3 - it.length) + it }
 
-            cesiumDir.resolve("${id}_${declaration.name}.kt_")
+            val name = when (declaration) {
+                is Enum -> "${declaration.name}.kt"
+                else -> "${id}_${declaration.name}.kt_"
+            }
+
+            cesiumDir.resolve(name)
                 .writeText(declaration.toCode())
         }
 }
