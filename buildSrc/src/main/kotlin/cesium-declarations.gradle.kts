@@ -14,7 +14,7 @@ tasks {
 
             val definitionsFile = rootProject.buildDir
                 .resolve("js/node_modules/cesium")
-                .resolve("/Source/Cesium.d.ts")
+                .resolve("Source/Cesium.d.ts")
 
             generateKotlinDeclarations(
                 definitionsFile = definitionsFile,
