@@ -14,6 +14,10 @@ data class Definition(
 fun parseTopDefinition(
     source: String
 ): Definition =
-    TOP_REGEX.find(source)!!
-        .groupValues
-        .let { Definition(it[1], it[2]) }
+    if (source.startsWith("/**")) {
+        TOP_REGEX.find(source)!!
+            .groupValues
+            .let { Definition(it[1], it[2]) }
+    } else {
+        Definition("", source)
+    }

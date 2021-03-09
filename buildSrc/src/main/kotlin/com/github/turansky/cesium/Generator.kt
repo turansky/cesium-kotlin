@@ -2,8 +2,6 @@ package com.github.turansky.cesium
 
 import java.io.File
 
-private val DEFINITION_REGEX = Regex("""\n(/\*\*\n.+?\n})""", RegexOption.DOT_MATCHES_ALL)
-
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
     Enum.PREFIX to ::Enum,
@@ -11,6 +9,7 @@ private val FACTORY_MAP = mapOf(
     "interface " to ::Interface,
     Interface.PREFIX to ::Interface,
     Class.PREFIX to ::Class,
+    "namespace " to ::Namespace,
     Namespace.PREFIX to ::Namespace
 )
 
@@ -21,11 +20,15 @@ internal fun generateKotlinDeclarations(
     val cesiumDir = sourceDir.resolve("cesium")
         .also { it.mkdirs() }
 
-    val definitions = definitionsFile.readText()
+    definitionsFile.readText()
         .replace("\n}/**", "\n}\n\n/**")
-
-    DEFINITION_REGEX.findAll(definitions)
-        .map { it.groupValues[1] }
+        .removePrefix("""declare module "cesium" {""")
+        .substringBefore("\n\n\n\n}")
+        .split("\n\n/**")
+        .filter { it.isNotBlank() }
+        .asSequence()
+        .map { "/**$it" }
+        .flatMap { it.split("\n\nexport ").asSequence() }
         .map { parseTopDefinition(it) }
         .map { source ->
             val body = source.body
