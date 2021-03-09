@@ -20,7 +20,7 @@ internal class Enum(
         return DEFAULT_PACKAGE +
                 source.doc +
                 "\n\n" +
-                "enum class $name {\n\n$body\n}"
+                "external enum class $name {\n\n$body\n}"
     }
 
     companion object {
