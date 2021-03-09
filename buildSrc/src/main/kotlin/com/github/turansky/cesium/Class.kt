@@ -4,7 +4,7 @@ internal class Class(
     override val source: Definition
 ) : Declaration() {
     override fun toCode(): String {
-        val body = source.body
+        val members = source.body
             .substringAfter("\n    ")
             .removeSuffix(";\n}")
             .splitToSequence(";\n    /")
@@ -22,9 +22,25 @@ internal class Class(
                     }
                 }
             }
-            .joinToString(separator = "\n\n") {
-                it.toCode()
-            }
+            .toList()
+
+        var body = members
+            .asSequence()
+            .filter { !it.static }
+            .map { it.toCode() }
+            .filter { it.isNotEmpty() } // TEMP
+            .joinToString(separator = "\n\n")
+
+        val companionBody = members
+            .asSequence()
+            .filter { it.static }
+            .map { it.toCode() }
+            .filter { it.isNotEmpty() } // TEMP
+            .joinToString(separator = "\n\n")
+
+        if (companionBody.isNotEmpty()) {
+            body += "\n\ncompanion object {\n$companionBody\n}"
+        }
 
         return DEFAULT_PACKAGE +
                 source.doc +
