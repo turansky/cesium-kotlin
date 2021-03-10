@@ -1,15 +1,13 @@
 package com.github.turansky.cesium
 
-internal class TopType(
+internal open class SimpleType(
     override val source: Definition
-) : Declaration() {
+) : Member() {
+    override val static: Boolean
+        get() = TODO("Do you call this for type?")
+
     override fun toCode(): String =
-        DEFAULT_PACKAGE +
-                source.doc +
+        source.doc +
                 "\n\n" +
                 typeDeclaration(source.body)
-
-    companion object {
-        const val PREFIX = "export type "
-    }
 }
