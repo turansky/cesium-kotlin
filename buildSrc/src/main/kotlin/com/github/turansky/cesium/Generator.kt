@@ -12,16 +12,9 @@ internal fun generateKotlinDeclarations(
     parseDeclarations(definitionsFile)
         .asSequence()
         .sortedBy(Declaration::fileName)
-        .forEachIndexed { index, declaration ->
-            val name = when (declaration) {
-                !is Interface
-                -> "${declaration.fileName}.kt"
-
-                else -> "${declaration.fileName}.kt_"
-            }
-
-            val file = cesiumDir.resolve(name)
-            check(!file.exists())
-            file.writeText(declaration.toCode())
+        .forEach { declaration ->
+            cesiumDir.resolve("${declaration.fileName}.kt")
+                .also { check(!it.exists()) }
+                .writeText(declaration.toCode())
         }
 }

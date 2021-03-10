@@ -27,16 +27,27 @@ internal fun parseDeclarations(
         it is Interface && classMap.containsKey(it.fileName)
     }
 
-    val companions = declarations.asSequence()
-        .filterIsInstance<Namespace>()
-        .filter { classMap.containsKey(it.fileName) }
-        .onEach {
-            classMap.getValue(it.fileName)
-                .companion = it
-        }
-        .toList()
+    val interfaceMap = declarations.asSequence()
+        .filterIsInstance<Interface>()
+        .associateBy { it.fileName }
 
-    declarations.removeAll(companions)
+    declarations.removeAll {
+        when {
+            it !is Namespace -> false
+
+            classMap.containsKey(it.fileName) -> {
+                classMap.getValue(it.fileName).companion = it
+                true
+            }
+
+            interfaceMap.containsKey(it.fileName) -> {
+                interfaceMap.getValue(it.fileName).companion = it
+                true
+            }
+
+            else -> false
+        }
+    }
 
     return declarations
 }
