@@ -23,6 +23,11 @@ internal fun parseDeclarations(
         .filterIsInstance<Class>()
         .associateBy { it.fileName }
 
+    // TODO: remove temp hack
+    declarations.removeAll {
+        it.fileName == "DictionaryLike"
+    }
+
     declarations.removeAll {
         it is Interface && classMap.containsKey(it.fileName)
     }
