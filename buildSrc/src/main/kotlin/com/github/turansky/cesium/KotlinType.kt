@@ -1,6 +1,7 @@
 package com.github.turansky.cesium
 
 private val CLASS_REGEX = Regex("""[\w\d]+""")
+private const val CALL_DELIMITER = "."
 
 private val STANDARD_TYPE_MAP = mapOf(
     "any" to "Any",
@@ -35,7 +36,10 @@ internal fun kotlinType(
         return STANDARD_TYPE_MAP.getValue(type)
 
     if (type.isClassLike())
-        return type
+        return if (CALL_DELIMITER in type) {
+            val (parent, alias) = type.split(CALL_DELIMITER)
+            parent + CALL_DELIMITER + applyCallbackFix(alias)
+        } else type
 
     if (type.endsWith(" | undefined") && type.indexOf("|") == type.lastIndexOf("|"))
         return kotlinType(type.removeSuffix(" | undefined")) + "?"
@@ -51,8 +55,8 @@ internal fun kotlinType(
 }
 
 private fun String.isClassLike(): Boolean =
-    if ("." in this) {
-        val types = split(".")
+    if (CALL_DELIMITER in this) {
+        val types = split(CALL_DELIMITER)
         types.size == 2 && types.all { it.isClassLike() }
     } else {
         CLASS_REGEX.matches(this) && get(0) == get(0).toUpperCase()

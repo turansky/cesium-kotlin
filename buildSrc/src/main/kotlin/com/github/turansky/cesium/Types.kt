@@ -6,11 +6,22 @@ internal fun typeDeclaration(
 ): String {
     val (name, body) = source.split(" = ")
     return if (body.startsWith("(")) {
-        "typealias $name = ${typeBody(body)}"
+        "typealias ${applyCallbackFix(name)} = ${typeBody(body)}"
     } else {
         (if (top) "external " else "") + "interface $name {}"
     }
 }
+
+internal fun applyCallbackFix(
+    source: String
+): String =
+    when (source) {
+        "foveatedInterpolationCallback",
+        "updateCallback"
+        -> source.capitalize()
+
+        else -> source
+    }
 
 private fun typeBody(body: String): String {
     val (params, returnType) = body

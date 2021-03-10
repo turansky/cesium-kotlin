@@ -23,11 +23,18 @@ internal abstract class TypeBase(
     }
 
     override fun toCode(): String {
-        val companionMembers = companion?.members ?: emptyList()
+        val companionMembers = companion?.members
+            ?.filter { it !is SimpleType }
+            ?: emptyList()
+
+        val aliases = companion?.members
+            ?.filterIsInstance<SimpleType>()
+            ?: emptyList()
 
         var body = members
             .asSequence()
             .filter { staticBody || !it.static }
+            .plus(aliases)
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
