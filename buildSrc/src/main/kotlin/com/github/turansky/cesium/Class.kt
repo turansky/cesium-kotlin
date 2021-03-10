@@ -6,25 +6,7 @@ internal class Class(
     var companion: Namespace? = null
 
     override fun toCode(): String {
-        val members = source.body
-            .substringAfter("\n    ")
-            .removeSuffix(";\n}")
-            .splitToSequence(";\n    /")
-            .map { if (it.startsWith("**")) "/$it" else it }
-            .map { parseTopDefinition(it) }
-            .map {
-                val body = it.body
-                if (body.startsWith("constructor")) {
-                    Constructor(it)
-                } else {
-                    if ("(" !in body) {
-                        Property(it)
-                    } else {
-                        Method(it)
-                    }
-                }
-            }
-            .toList()
+        val members = members(source.body)
 
         var body = members
             .asSequence()
