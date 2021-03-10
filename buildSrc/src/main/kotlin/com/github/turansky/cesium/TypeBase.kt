@@ -1,5 +1,7 @@
 package com.github.turansky.cesium
 
+import com.github.turansky.cesium.Suppress.TOPLEVEL_TYPEALIASES_ONLY
+
 internal abstract class TypeBase(
     final override val source: Definition
 ) : Declaration(), HasMembers {
@@ -9,14 +11,14 @@ internal abstract class TypeBase(
 
     override val members = members(source.body)
 
-    open fun suppresses(): List<String> {
+    open fun suppresses(): List<Suppress> {
         val hasAliases = sequenceOf(this, companion)
             .filterNotNull()
             .flatMap { it.members.asSequence() }
             .any { it is SimpleType }
 
         return if (hasAliases) {
-            listOf("TOPLEVEL_TYPEALIASES_ONLY")
+            listOf(TOPLEVEL_TYPEALIASES_ONLY)
         } else emptyList()
     }
 
@@ -33,9 +35,9 @@ internal abstract class TypeBase(
         val suppresses = suppresses()
         val suppressHeader = if (suppresses.isNotEmpty()) {
             suppresses.asSequence()
-                .map { """"$it"""" }
+                .map { """"${it.name}"""" }
                 .joinToString(", ")
-                .let { "@file:Suppress($it)" }
+                .let { "@file:Suppress($it)\n\n" }
         } else ""
 
         if (!staticBody) {
