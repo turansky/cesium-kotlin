@@ -20,7 +20,8 @@ internal fun generateKotlinDeclarations(
                 else -> "${declaration.fileName}.kt_"
             }
 
-            cesiumDir.resolve(name)
-                .writeText(declaration.toCode())
+            val file = cesiumDir.resolve(name)
+            check(!file.exists())
+            file.writeText(declaration.toCode())
         }
 }
