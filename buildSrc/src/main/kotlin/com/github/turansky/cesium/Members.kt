@@ -14,6 +14,9 @@ internal fun members(
 
 private fun Definition.toMember(): Member =
     when {
+        body.startsWith("type ")
+        -> SimpleType(this)
+
         body.startsWith("constructor(")
         -> Constructor(this)
 

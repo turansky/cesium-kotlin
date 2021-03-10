@@ -7,6 +7,7 @@ internal class Class(
 
     override fun toCode(): String {
         val members = members(source.body)
+        val companionMembers = companion?.members ?: emptyList()
 
         var body = members
             .asSequence()
@@ -18,6 +19,7 @@ internal class Class(
         val companionBody = members
             .asSequence()
             .filter { it.static }
+            .plus(companionMembers)
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
