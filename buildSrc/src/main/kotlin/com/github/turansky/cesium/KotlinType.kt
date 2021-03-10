@@ -31,14 +31,10 @@ private val STANDARD_TYPE_MAP = mapOf(
 internal fun kotlinType(
     type: String
 ): String {
-    // TODO: use interface
-    if (type == "InterpolationAlgorithm" || type == "Packable")
-        return "dynamic"
-
     if (STANDARD_TYPE_MAP.containsKey(type))
         return STANDARD_TYPE_MAP.getValue(type)
 
-    if (CLASS_REGEX.matches(type) && type.get(0) == type.get(0).toUpperCase())
+    if (type.isClassLike())
         return type
 
     if (type.endsWith(" | undefined") && type.indexOf("|") == type.lastIndexOf("|"))
@@ -51,7 +47,13 @@ internal fun kotlinType(
     if (promiseResult != type)
         return "kotlin.js.Promise<${kotlinType(promiseResult)}>"
 
-    // TODO: add aliases support
-
     return "dynamic"
 }
+
+private fun String.isClassLike(): Boolean =
+    if ("." in this) {
+        val types = split(".")
+        types.size == 2 && types.all { it.isClassLike() }
+    } else {
+        CLASS_REGEX.matches(this) && get(0) == get(0).toUpperCase()
+    }
