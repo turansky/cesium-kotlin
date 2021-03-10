@@ -5,7 +5,7 @@ import java.io.File
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
     Enum.PREFIX to ::Enum,
-    Type.PREFIX to ::Type,
+    TopType.PREFIX to ::TopType,
     "interface " to ::Interface,
     Interface.PREFIX to ::Interface,
     Class.PREFIX to ::Class,

@@ -1,6 +1,6 @@
 package com.github.turansky.cesium
 
-internal class Type(
+internal class TopType(
     override val source: Definition
 ) : Declaration() {
     override fun toCode(): String =
