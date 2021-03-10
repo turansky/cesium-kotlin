@@ -16,13 +16,19 @@ private val FACTORY_MAP = mapOf(
 internal fun parseDeclarations(
     definitionsFile: File
 ): List<Declaration> {
-    return definitionsFile.readText()
+    val declarations = readDeclarations(definitionsFile)
+    return declarations
+}
+
+private fun readDeclarations(
+    definitionsFile: File
+): List<Declaration> =
+    definitionsFile.readText()
         .replace("\n}/**", "\n}\n\n/**")
         .removePrefix("""declare module "cesium" {""")
         .substringBefore("\n\n\n\n}")
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
-        .asSequence()
         .map { "/**$it" }
         .flatMap { it.split("\n\nexport ").asSequence() }
         .map { parseTopDefinition(it) }
@@ -35,4 +41,3 @@ internal fun parseDeclarations(
             FACTORY_MAP.getValue(prefix)(newSource)
         }
         .toList()
-}
