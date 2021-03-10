@@ -3,8 +3,7 @@ package com.github.turansky.cesium
 internal open class SimpleType(
     override val source: Definition
 ) : Member() {
-    override val static: Boolean
-        get() = TODO("Do you call this for type?")
+    override val static: Boolean = false
 
     override fun toCode(): String =
         source.doc +

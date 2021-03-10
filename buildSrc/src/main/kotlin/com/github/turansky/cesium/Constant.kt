@@ -3,7 +3,7 @@ package com.github.turansky.cesium
 internal class Constant(
     override val source: Definition
 ) : Member() {
-    override val static = true
+    override val static = false
 
     override fun toCode(): String {
         val body = source.body
