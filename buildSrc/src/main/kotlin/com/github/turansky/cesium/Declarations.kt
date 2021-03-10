@@ -23,6 +23,10 @@ internal fun parseDeclarations(
         .filterIsInstance<Class>()
         .associateBy { it.fileName }
 
+    declarations.removeAll {
+        it is Interface && classMap.containsKey(it.fileName)
+    }
+
     val companions = declarations.asSequence()
         .filterIsInstance<Namespace>()
         .filter { classMap.containsKey(it.fileName) }
