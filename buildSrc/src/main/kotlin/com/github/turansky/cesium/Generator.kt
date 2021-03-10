@@ -13,17 +13,11 @@ internal fun generateKotlinDeclarations(
         .asSequence()
         .sortedBy(Declaration::fileName)
         .forEachIndexed { index, declaration ->
-            val id = index.toString()
-                .let { "0".repeat(3 - it.length) + it }
-
             val name = when (declaration) {
-                is Enum,
-                is TopType,
-                is Class,
-                is Namespace
+                !is Interface
                 -> "${declaration.fileName}.kt"
 
-                else -> "${id}_${declaration.fileName}.kt_"
+                else -> "${declaration.fileName}.kt_"
             }
 
             cesiumDir.resolve(name)
