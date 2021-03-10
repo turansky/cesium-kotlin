@@ -20,6 +20,9 @@ private fun Definition.toMember(): Member =
         body.startsWith("constructor(")
         -> Constructor(this)
 
+        body.startsWith("const ")
+        -> Constant(copy(body = body.removePrefix("const ")))
+
         "(" !in body
         -> Property(this)
 
