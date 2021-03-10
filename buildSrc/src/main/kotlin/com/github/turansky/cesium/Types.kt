@@ -1,16 +1,18 @@
 package com.github.turansky.cesium
 
 internal fun typeDeclaration(
-    body: String
+    source: String,
+    top: Boolean
 ): String {
-    val (name, source) = body.split(" = ")
-    return "typealias $name = ${typeBody(source)}"
+    val (name, body) = source.split(" = ")
+    return if (body.startsWith("(")) {
+        "typealias $name = ${typeBody(body)}"
+    } else {
+        (if (top) "external " else "") + "interface $name {}"
+    }
 }
 
 private fun typeBody(body: String): String {
-    if (!body.startsWith("("))
-        return "Any"
-
     val (params, returnType) = body
         .removePrefix("(")
         .removeSuffix(";")

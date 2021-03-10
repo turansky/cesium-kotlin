@@ -9,5 +9,5 @@ internal open class SimpleType(
     override fun toCode(): String =
         source.doc +
                 "\n\n" +
-                typeDeclaration(source.body)
+                typeDeclaration(source.body, false)
 }

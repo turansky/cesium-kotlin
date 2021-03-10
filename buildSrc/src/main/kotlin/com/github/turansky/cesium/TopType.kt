@@ -7,7 +7,7 @@ internal class TopType(
         DEFAULT_PACKAGE +
                 source.doc +
                 "\n\n" +
-                typeDeclaration(source.body)
+                typeDeclaration(source.body, true)
 
     companion object {
         const val PREFIX = "export type "
