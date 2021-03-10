@@ -17,6 +17,16 @@ internal fun parseDeclarations(
     definitionsFile: File
 ): List<Declaration> {
     val declarations = readDeclarations(definitionsFile)
+        .toMutableList()
+
+    val classMap = declarations.asSequence()
+        .filterIsInstance<Class>()
+        .associateBy { it.fileName }
+
+    declarations.removeAll {
+        it is Interface && classMap.containsKey(it.fileName)
+    }
+
     return declarations
 }
 
