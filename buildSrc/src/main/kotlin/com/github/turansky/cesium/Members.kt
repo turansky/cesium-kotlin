@@ -2,8 +2,11 @@ package com.github.turansky.cesium
 
 internal fun members(
     body: String
-): List<Member> =
-    body
+): List<Member> {
+    if (body.endsWith("{\n}"))
+        return emptyList()
+
+    return body
         .substringAfter("\n    ")
         .removeSuffix(";\n}")
         .splitToSequence(";\n    /")
@@ -11,6 +14,7 @@ internal fun members(
         .map { parseTopDefinition(it) }
         .map { it.toMember() }
         .toList()
+}
 
 private fun Definition.toMember(): Member =
     when {
