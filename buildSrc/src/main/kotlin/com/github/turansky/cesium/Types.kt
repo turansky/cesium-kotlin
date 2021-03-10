@@ -6,7 +6,11 @@ internal fun typeDeclaration(
 ): String {
     val (name, body) = source.split(" = ")
     return if (body.startsWith("(")) {
-        "typealias $name = ${typeBody(body)}"
+        val suppress = if (!top) {
+            """@Suppress("TOPLEVEL_TYPEALIASES_ONLY")""" + "\n"
+        } else ""
+
+        suppress + "typealias $name = ${typeBody(body)}"
     } else {
         (if (top) "external " else "") + "interface $name {}"
     }
