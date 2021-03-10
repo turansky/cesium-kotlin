@@ -1,6 +1,6 @@
 package com.github.turansky.cesium
 
-private val TOP_REGEX = Regex("""(.+?\*/)\n(.+)""", RegexOption.DOT_MATCHES_ALL)
+private val TOP_REGEX = Regex("""(.+?\*/)\n\s*(.+)""", RegexOption.DOT_MATCHES_ALL)
 
 interface HasDoc {
     val doc: String

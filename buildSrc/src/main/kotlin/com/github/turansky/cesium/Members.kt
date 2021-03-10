@@ -15,7 +15,7 @@ internal fun members(
 private fun Definition.toMember(): Member =
     when {
         body.startsWith("type ")
-        -> SimpleType(this)
+        -> SimpleType(copy(body = body.removePrefix("type ")))
 
         body.startsWith("constructor(")
         -> Constructor(this)
