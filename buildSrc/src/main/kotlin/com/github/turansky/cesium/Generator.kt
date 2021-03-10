@@ -19,7 +19,8 @@ internal fun generateKotlinDeclarations(
             val name = when (declaration) {
                 is Enum,
                 is TopType,
-                is Class
+                is Class,
+                is Namespace
                 -> "${declaration.fileName}.kt"
 
                 else -> "${id}_${declaration.fileName}.kt_"
