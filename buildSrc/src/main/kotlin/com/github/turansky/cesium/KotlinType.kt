@@ -10,6 +10,8 @@ private val STANDARD_TYPE_MAP = mapOf(
     "number" to "Double",
     "string" to "String",
 
+    "void" to "Unit",
+
     "Element" to "org.w3c.dom.Element",
     "HTMLElement" to "org.w3c.dom.HTMLElement",
     "HTMLImageElement" to "org.w3c.dom.HTMLImageElement",
