@@ -3,6 +3,8 @@ package com.github.turansky.cesium
 internal class Class(
     override val source: Definition
 ) : Declaration() {
+    var companion: Namespace? = null
+
     override fun toCode(): String {
         val members = source.body
             .substringAfter("\n    ")
