@@ -25,8 +25,6 @@ internal class Type(
             .map { it.toCode() }
             .joinToString(", ")
 
-        println("RT: $returnType")
-
         return "($parameters) -> ${kotlinType(returnType)}"
     }
 
