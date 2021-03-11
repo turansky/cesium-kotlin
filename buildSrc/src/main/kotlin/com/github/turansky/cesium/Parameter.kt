@@ -5,8 +5,8 @@ internal class Parameter(
 ) {
     private val name = body.substringBefore(": ").removeSuffix("?")
     private val type = kotlinType(body.substringAfter(": "))
-    private val nullable = "?:" in body
+    private val optional = "?:" in body
 
     fun toCode(): String =
-        " $name: $type" + if (nullable) "?" else ""
+        " $name: $type" + if (optional) "?" else ""
 }
