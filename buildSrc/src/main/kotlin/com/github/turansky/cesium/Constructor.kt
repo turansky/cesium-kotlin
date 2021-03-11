@@ -16,20 +16,8 @@ internal class Constructor(
         p != null && p.name == "options" && p.optional
     }
 
-    override fun toCode(): String {
-        if (hiddenOptions)
-            return ""
-
-        return when (parameters.size) {
-            0 -> ""
-            1 -> "(${parameters.single().toCode()})"
-            else -> {
-                val params = parameters
-                    .joinToString(",\n") {
-                        it.toCode()
-                    }
-                "(\n$params\n)"
-            }
-        }
-    }
+    override fun toCode(): String =
+        if (!hiddenOptions) {
+            parameters.toCode()
+        } else ""
 }

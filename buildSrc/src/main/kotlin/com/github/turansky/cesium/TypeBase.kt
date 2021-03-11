@@ -65,7 +65,6 @@ internal abstract class TypeBase(
                 .filter { it.static }
                 .plus(companionMembers)
                 .map { it.toCode() }
-                .filter { it.isNotEmpty() } // TEMP
                 .joinToString(separator = "\n\n")
 
             if (companionBody.isNotEmpty()) {

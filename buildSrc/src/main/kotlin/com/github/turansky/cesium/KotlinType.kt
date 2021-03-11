@@ -13,12 +13,18 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "void" to "Unit",
 
+    "Date" to "kotlin.js.Date",
+
     "Element" to "org.w3c.dom.Element",
     "HTMLElement" to "org.w3c.dom.HTMLElement",
     "HTMLImageElement" to "org.w3c.dom.HTMLImageElement",
     "HTMLCanvasElement" to "org.w3c.dom.HTMLCanvasElement",
     "HTMLVideoElement" to "org.w3c.dom.HTMLVideoElement",
     "HTMLIFrameElement" to "org.w3c.dom.HTMLIFrameElement",
+
+    "XMLDocument" to "org.w3c.dom.XMLDocument",
+
+    "Blob" to "org.w3c.files.Blob",
 
     "ArrayBuffer" to "org.khronos.webgl.ArrayBuffer",
     "Uint8Array" to "org.khronos.webgl.Uint8Array",
