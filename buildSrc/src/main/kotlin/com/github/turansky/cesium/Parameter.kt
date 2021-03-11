@@ -8,7 +8,7 @@ internal class Parameter(
         kotlinType(body.substringAfter(": "))
     }
 
-    val optional: Boolean by lazy { "?:" in body }
+    val optional: Boolean by lazy { "?:" in body.substringBefore("{") }
     private val nullable: Boolean = optional && type != "dynamic"
 
     var supportDefault: Boolean = true
