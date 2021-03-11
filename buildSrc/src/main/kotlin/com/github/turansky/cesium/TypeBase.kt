@@ -9,7 +9,9 @@ internal abstract class TypeBase(
     abstract val companion: HasMembers?
     open val staticBody: Boolean = false
 
-    override val members = members(source.body)
+    override val members by lazy {
+        members(source.body)
+    }
 
     open fun suppresses(): List<Suppress> {
         val hasAliases = sequenceOf(this, companion)
