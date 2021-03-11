@@ -5,7 +5,22 @@ internal class Constructor(
 ) : Member() {
     override val static: Boolean = false
 
-    override fun toCode(): String {
-        return ""
-    }
+    private val parameters = source.body
+        .splitToSequence(", ")
+        .filter { it.isNotEmpty() }
+        .map(::Parameter)
+        .toList()
+
+    override fun toCode(): String =
+        when (parameters.size) {
+            0 -> ""
+            1 -> "(${parameters.single().toCode()})"
+            else -> {
+                val params = parameters
+                    .joinToString(",\n") {
+                        it.toCode()
+                    }
+                "(\n$params\n)"
+            }
+        }
 }

@@ -30,7 +30,7 @@ private fun Definition.toMember(): Member =
         -> SimpleType(copy(body = body.removePrefix("type ")))
 
         body.startsWith("constructor(")
-        -> Constructor(this)
+        -> Constructor(copy(body = body.removeSurrounding("constructor(", ")")))
 
         body.startsWith("const ")
         -> Constant(copy(body = body.removePrefix("const ")))

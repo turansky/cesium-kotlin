@@ -36,8 +36,15 @@ internal abstract class TypeBase(
             ?.filter { it.isNestedType() }
             ?: emptyList()
 
+        val constructor = members
+            .firstOrNull()
+            ?.let { it as? Constructor }
+            ?.toCode()
+            ?: ""
+
         var body = members
             .asSequence()
+            .filter { it !is Constructor }
             .filter { staticBody || !it.static }
             .plus(nestedTypes)
             .map { it.toCode() }
@@ -75,7 +82,7 @@ internal abstract class TypeBase(
         return header +
                 source.doc +
                 "\n" +
-                "$modifier $typeName $fileName {\n$body\n}"
+                "$modifier $typeName $fileName $constructor {\n$body\n}"
     }
 }
 
