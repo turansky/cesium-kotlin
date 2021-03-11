@@ -2,6 +2,9 @@ package com.github.turansky.cesium
 
 internal const val JS_FUNCTION = "Function"
 
+private const val HTML_ELEMENT = "org.w3c.dom.HTMLElement"
+private const val PROMISE = "kotlin.js.Promise"
+
 private val CLASS_REGEX = Regex("""[\w\d]+""")
 private const val CALL_DELIMITER = "."
 
@@ -37,7 +40,11 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "CameraEventType | any[] | undefined" to "CameraEventType?",
     "any[] | GeometryInstance" to "GeometryInstance",
-    "GeometryInstance[] | GeometryInstance" to "Array<out GeometryInstance>"
+    "GeometryInstance[] | GeometryInstance" to "Array<out GeometryInstance>",
+
+    "Promise<HTMLImageElement | HTMLCanvasElement> | undefined" to "$PROMISE<$HTML_ELEMENT>?",
+    "undefined | Promise<void>" to "$PROMISE<Nothing?>?",
+    "Cartesian2 | Cartesian3" to "Cartesian3"
 )
 
 internal fun kotlinType(
@@ -60,7 +67,7 @@ internal fun kotlinType(
 
     val promiseResult = type.removeSurrounding("Promise<", ">")
     if (promiseResult != type)
-        return "kotlin.js.Promise<${kotlinType(promiseResult)}>"
+        return "$PROMISE<${kotlinType(promiseResult)}>"
 
     if (type == "Element | string")
         return kotlinType("Element")
