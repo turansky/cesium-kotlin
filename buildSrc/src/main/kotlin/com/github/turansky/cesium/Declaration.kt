@@ -11,6 +11,5 @@ internal abstract class Declaration {
         ).sortedBy { it.length }.first()
     }
 
-    open fun toCode(): String =
-        source.doc + "\n\n" + source.body
+    abstract fun toCode(): String
 }

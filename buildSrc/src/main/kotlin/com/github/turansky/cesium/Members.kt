@@ -18,6 +18,13 @@ internal fun members(
 
 private fun Definition.toMember(): Member =
     when {
+        body.startsWith("namespace ") -> {
+            val newBody = body
+                .removePrefix("namespace ")
+                .replace("\n    ", "\n")
+            NestedNamespace(copy(body = newBody))
+        }
+
         body.startsWith("type ")
         -> SimpleType(copy(body = body.removePrefix("type ")))
 

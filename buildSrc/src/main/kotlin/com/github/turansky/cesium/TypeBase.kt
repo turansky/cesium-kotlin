@@ -22,19 +22,22 @@ internal abstract class TypeBase(
         } else emptyList()
     }
 
-    override fun toCode(): String {
+    override fun toCode(): String =
+        toCode(true)
+
+    fun toCode(top: Boolean): String {
         val companionMembers = companion?.members
-            ?.filter { it !is SimpleType }
+            ?.filterNot { it.isNestedType() }
             ?: emptyList()
 
-        val aliases = companion?.members
-            ?.filterIsInstance<SimpleType>()
+        val nestedTypes = companion?.members
+            ?.filter { it.isNestedType() }
             ?: emptyList()
 
         var body = members
             .asSequence()
             .filter { staticBody || !it.static }
-            .plus(aliases)
+            .plus(nestedTypes)
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
@@ -61,10 +64,18 @@ internal abstract class TypeBase(
             }
         }
 
-        return suppressHeader +
-                DEFAULT_PACKAGE +
+        val header = if (top) {
+            suppressHeader +
+                    DEFAULT_PACKAGE
+        } else ""
+
+        val modifier = if (top) "external" else ""
+        return header +
                 source.doc +
-                "\n\n" +
-                "external $typeName $fileName {\n$body\n}"
+                "\n" +
+                "$modifier $typeName $fileName {\n$body\n}"
     }
 }
+
+private fun Member.isNestedType(): Boolean =
+    this is SimpleType || this is NestedNamespace
