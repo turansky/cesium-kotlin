@@ -2,6 +2,8 @@ package com.github.turansky.cesium
 
 import java.io.File
 
+private const val TS_FUNCTION = "(...params: any[]) => any"
+
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
     Enum.PREFIX to ::Enum,
@@ -64,6 +66,8 @@ private fun readDeclarations(
         .replace("\n}/**", "\n}\n\n/**")
         .removePrefix("""declare module "cesium" {""")
         .substringBefore("\n\n\n\n}")
+        .replace("($TS_FUNCTION)", JS_FUNCTION)
+        .replace(TS_FUNCTION, JS_FUNCTION)
         .replace("* /**", "*")
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }

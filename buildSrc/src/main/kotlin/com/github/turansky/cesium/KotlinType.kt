@@ -1,5 +1,7 @@
 package com.github.turansky.cesium
 
+internal const val JS_FUNCTION = "Function"
+
 private val CLASS_REGEX = Regex("""[\w\d]+""")
 private const val CALL_DELIMITER = "."
 
@@ -13,6 +15,7 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "void" to "Unit",
 
+    JS_FUNCTION to "Function<*>",
     "Date" to "kotlin.js.Date",
 
     "Element" to "org.w3c.dom.Element",
