@@ -35,9 +35,13 @@ private fun Definition.toMember(): Member =
         body.startsWith("const ")
         -> Constant(copy(body = body.removePrefix("const ")))
 
-        "(" !in body
-        -> Property(this)
-
-        else
-        -> Method(this)
+        else -> {
+            val pi = body.indexOf(":")
+            val mi = body.indexOf("(")
+            if (mi == -1 || (pi < mi)) {
+                Property(this)
+            } else {
+                Method(this)
+            }
+        }
     }
