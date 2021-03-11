@@ -27,6 +27,8 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "XMLDocument" to "org.w3c.dom.XMLDocument",
 
+    "ImageData" to "org.w3c.dom.ImageData",
+
     "Blob" to "org.w3c.files.Blob",
 
     "ArrayBuffer" to "org.khronos.webgl.ArrayBuffer",
