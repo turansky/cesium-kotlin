@@ -57,7 +57,7 @@ internal fun kotlinType(
 private fun String.isClassLike(): Boolean =
     if (CALL_DELIMITER in this) {
         val types = split(CALL_DELIMITER)
-        types.size == 2 && types.all { it.isClassLike() }
+        types.size == 2 && types[0].isClassLike() && applyCallbackFix(types[1]).isClassLike()
     } else {
         CLASS_REGEX.matches(this) && get(0) == get(0).toUpperCase()
     }
