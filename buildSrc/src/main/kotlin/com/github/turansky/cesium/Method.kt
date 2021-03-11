@@ -3,9 +3,7 @@ package com.github.turansky.cesium
 internal class Method(
     override val source: Definition
 ) : Member() {
-    private val name = source.body
-        .substringBefore("(")
-        .substringAfterLast(" ")
+    private val name = source.parseFunctionName()
 
     private val modifiers = source.body
         .substringBefore("(")
@@ -14,26 +12,14 @@ internal class Method(
 
     override val static: Boolean = "static" in modifiers
 
-    private val parameters = source.body
-        .substringAfter("(")
-        .substringBeforeLast("): ")
-        .splitToSequence(", ")
-        .filter { it.isNotEmpty() }
-        .map(::Parameter)
-        .toList()
-
-    private val returnType: String = source.body
-        .substringAfterLast("): ")
-        .let { kotlinType(it) }
+    private val parameters = source.parseFunctionParameters()
+    private val returnType = source.parseFunctionReturnType()
 
     override fun toCode(): String {
         if (name == "toString" && parameters.isEmpty())
             return ""
 
-        val returnExpression = when (returnType) {
-            "Unit" -> ""
-            else -> ": $returnType"
-        }
+        val returnExpression = returnType?.let { ": $it" } ?: ""
 
         return source.doc +
                 "\n" +
