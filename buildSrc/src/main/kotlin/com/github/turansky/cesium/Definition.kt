@@ -12,12 +12,15 @@ data class Definition(
 ) : HasDoc
 
 fun parseTopDefinition(
-    source: String
-): Definition =
-    if (source.startsWith("/**")) {
+    data: String
+): Definition {
+    val source = data.trim().removeSuffix(";")
+
+    return if (source.startsWith("/**")) {
         TOP_REGEX.find(source)!!
             .groupValues
             .let { Definition(it[1], it[2]) }
     } else {
         Definition("", source)
     }
+}

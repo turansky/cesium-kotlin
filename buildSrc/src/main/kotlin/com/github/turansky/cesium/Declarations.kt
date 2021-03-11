@@ -72,7 +72,6 @@ private fun readDeclarations(
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .map { "/**$it" }
-        .map { it.removeSuffix(";") }
         .flatMap { it.split("\n\nexport ").asSequence() }
         .map { parseTopDefinition(it) }
         .map { source ->

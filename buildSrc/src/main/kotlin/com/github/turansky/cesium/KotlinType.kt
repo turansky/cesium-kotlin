@@ -44,7 +44,9 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "Promise<HTMLImageElement | HTMLCanvasElement> | undefined" to "$PROMISE<$HTML_ELEMENT>?",
     "undefined | Promise<void>" to "$PROMISE<Nothing?>?",
-    "Cartesian2 | Cartesian3" to "Cartesian3"
+    "Cartesian2 | Cartesian3" to "Cartesian3",
+
+    "Entity | Entity.ConstructorOptions" to "Entity"
 )
 
 internal fun kotlinType(
