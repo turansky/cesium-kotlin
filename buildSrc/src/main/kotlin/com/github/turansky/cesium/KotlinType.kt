@@ -51,6 +51,9 @@ internal fun kotlinType(
     if (promiseResult != type)
         return "kotlin.js.Promise<${kotlinType(promiseResult)}>"
 
+    if (type == "Element | string")
+        return kotlinType("Element")
+
     return "dynamic"
 }
 
