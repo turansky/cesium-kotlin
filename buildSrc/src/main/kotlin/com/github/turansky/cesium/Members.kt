@@ -22,6 +22,7 @@ private fun Definition.toMember(): Member =
             val newBody = body
                 .removePrefix("namespace ")
                 .replace("\n    ", "\n")
+                .removeSuffix("\n}")
             NestedNamespace(copy(body = newBody))
         }
 
