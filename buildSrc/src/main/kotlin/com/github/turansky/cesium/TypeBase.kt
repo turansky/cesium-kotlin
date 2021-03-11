@@ -28,19 +28,17 @@ internal abstract class TypeBase(
         toCode(true)
 
     fun toCode(top: Boolean): String {
+        val constructor = members.firstOrNull() as? Constructor
+        val constructorBody = constructor?.toCode() ?: ""
+
         val companionMembers = companion?.members
             ?.filterNot { it.isNestedType() }
             ?: emptyList()
 
         val nestedTypes = companion?.members
             ?.filter { it.isNestedType() }
+            ?.filter(constructor.toMemberFilter())
             ?: emptyList()
-
-        val constructor = members
-            .firstOrNull()
-            ?.let { it as? Constructor }
-            ?.toCode()
-            ?: ""
 
         var body = members
             .asSequence()
@@ -81,9 +79,18 @@ internal abstract class TypeBase(
         return header +
                 source.doc +
                 "\n" +
-                "$modifier $typeName $fileName $constructor {\n$body\n}"
+                "$modifier $typeName $fileName $constructorBody {\n$body\n}"
     }
 }
 
 private fun Member.isNestedType(): Boolean =
     this is SimpleType || this is NestedNamespace
+
+private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
+    if (this == null || !hiddenOptions)
+        return { true }
+
+    return {
+        it !is SimpleType || it.fileName != "ConstructorOptions"
+    }
+}
