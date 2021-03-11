@@ -3,10 +3,13 @@ package com.github.turansky.cesium
 internal class Parameter(
     body: String
 ) {
-    private val name = body.substringBefore(": ").removeSuffix("?")
-    private val type = kotlinType(body.substringAfter(": "))
-    private val optional = "?:" in body
-    private val nullable = optional && type != "dynamic"
+    val name: String = body.substringBefore(": ").removeSuffix("?")
+    private val type: String by lazy {
+        kotlinType(body.substringAfter(": "))
+    }
+
+    val optional: Boolean by lazy { "?:" in body }
+    private val nullable: Boolean = optional && type != "dynamic"
 
     var supportDefault: Boolean = true
 

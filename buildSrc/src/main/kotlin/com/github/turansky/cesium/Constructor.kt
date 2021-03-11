@@ -11,8 +11,16 @@ internal class Constructor(
         .map(::Parameter)
         .toList()
 
-    override fun toCode(): String =
-        when (parameters.size) {
+    val hiddenOptions: Boolean by lazy {
+        val p = parameters.singleOrNull()
+        p != null && p.name == "options" && p.optional
+    }
+
+    override fun toCode(): String {
+        if (hiddenOptions)
+            return ""
+
+        return when (parameters.size) {
             0 -> ""
             1 -> "(${parameters.single().toCode()})"
             else -> {
@@ -23,4 +31,5 @@ internal class Constructor(
                 "(\n$params\n)"
             }
         }
+    }
 }
