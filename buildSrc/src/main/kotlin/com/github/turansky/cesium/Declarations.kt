@@ -64,6 +64,7 @@ private fun readDeclarations(
         .replace("\n}/**", "\n}\n\n/**")
         .removePrefix("""declare module "cesium" {""")
         .substringBefore("\n\n\n\n}")
+        .replace("* /**", "*")
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .map { "/**$it" }
