@@ -7,6 +7,10 @@ internal class Parameter(
     private val type = kotlinType(body.substringAfter(": "))
     private val optional = "?:" in body
 
+    var supportDefault: Boolean = true
+
     fun toCode(): String =
-        " $name: $type" + if (optional) "?" else ""
+        " $name: $type" +
+                (if (optional) "?" else "") +
+                (if (supportDefault) " = definedExternally" else "")
 }

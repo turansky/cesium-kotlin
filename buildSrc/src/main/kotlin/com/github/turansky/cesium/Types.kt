@@ -32,6 +32,7 @@ private fun typeBody(body: String): String {
     val parameters = params.splitToSequence(",")
         .filter { it.isNotEmpty() }
         .map(::Parameter)
+        .onEach { it.supportDefault = false }
         .map { it.toCode() }
         .joinToString(", ")
 
