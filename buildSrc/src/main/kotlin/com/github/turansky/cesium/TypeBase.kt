@@ -70,6 +70,10 @@ internal abstract class TypeBase(
             }
         }
 
+        // TODO: move cleanup to separate method
+        body = "$constructorBody {\n$body\n}"
+            .replace(": $fileName.", ": ")
+
         val header = if (top) {
             suppressHeader +
                     DEFAULT_PACKAGE
@@ -79,7 +83,7 @@ internal abstract class TypeBase(
         return header +
                 source.doc +
                 "\n" +
-                "$modifier $typeName $fileName $constructorBody {\n$body\n}"
+                "$modifier $typeName $fileName $body"
     }
 }
 
