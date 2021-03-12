@@ -14,8 +14,11 @@ private val MULTI_TYPES = listOf(
 
     "HTMLImageElement | HTMLCanvasElement | string | Resource | Billboard.CreateImageCallback",
     "PostProcessStage | PostProcessStageComposite",
-    "Cartesian3 | HeadingPitchRange",
     "DataSource | Promise<DataSource>",
+
+    "Cartesian3 | HeadingPitchRange",
+    "Property | Color",
+    "DataSource | CompositeEntityCollection",
 
     "KmlTourFlyTo | KmlTourWait",
     "KmlCamera | KmlLookAt",
@@ -23,6 +26,7 @@ private val MULTI_TYPES = listOf(
     "ImageryProvider | TerrainProvider",
     "Promise<object> | any",
 
+    "number | Packable",
     "string | number"
 )
 
