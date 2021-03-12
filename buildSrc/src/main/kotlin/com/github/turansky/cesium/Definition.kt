@@ -1,17 +1,20 @@
 package com.github.turansky.cesium
 
 private val TOP_REGEX = Regex("""(.+?\*/)\n\s*(.+)""", RegexOption.DOT_MATCHES_ALL)
+private val FUN_START_REGEX = Regex("""^[\w\d]+\(""")
 
-private val MULTI_PARAMETERS = listOf(
+private val MULTI_TYPES = listOf(
+    "Resource | string | Document | Blob",
     "Resource | string | ArrayBuffer",
-    "string | number",
+    "Resource | string | any",
+    "Resource | string",
+
     "HTMLImageElement | HTMLCanvasElement | string | Resource | Billboard.CreateImageCallback",
     "Cartesian3 | HeadingPitchRange",
-    "Resource | string",
-    "Resource | string | any",
     "DataSource | Promise<DataSource>",
-    "Resource | string | Document | Blob",
-    "KmlTourFlyTo | KmlTourWait"
+    "KmlTourFlyTo | KmlTourWait",
+
+    "string | number"
 )
 
 internal interface HasDoc {
@@ -39,5 +42,24 @@ internal fun parseTopDefinition(
 }
 
 internal fun Definition.flatten(): Sequence<Definition> {
-    return sequenceOf(this)
+    // if (body.startsWith("export function ")) {
+    if (FUN_START_REGEX.find(body) == null) {
+        return sequenceOf(this)
+    }
+
+    val parameters = body
+        .substringAfter("(")
+        .substringBeforeLast(")")
+
+    val multiType = MULTI_TYPES
+        .firstOrNull { it in parameters }
+        ?: return sequenceOf(this)
+
+    return multiType.splitToSequence(" | ")
+        .mapIndexed { index, type ->
+            Definition(
+                doc = if (index == 0) doc else "",
+                body = body.replace(multiType, type)
+            )
+        }
 }
