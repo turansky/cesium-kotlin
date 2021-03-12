@@ -12,7 +12,7 @@ internal class Function(
 
         return DEFAULT_PACKAGE +
                 source.doc +
-                "\n\n" +
+                "\n" +
                 "external fun $name ${parameters.toCode()}$returnExpression"
     }
 
