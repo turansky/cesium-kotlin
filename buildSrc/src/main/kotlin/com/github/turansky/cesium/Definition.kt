@@ -75,15 +75,22 @@ private fun newBodies(
     body: String,
     multiType: String
 ): Sequence<String> {
-    val bodies = multiType.containedTypes()
-        .map { type -> body.replace(multiType, type) }
+    val optionalMultiType = "?: $multiType"
+    if (optionalMultiType !in body)
+        return multiType.containedTypes()
+            .map { type -> body.replace(multiType, type) }
 
-    return if ("?: $multiType" in body) {
-        require("?: $multiType)" in body)
-        sequenceOf(body)
-    } else {
-        bodies
-    }
+
+    require("$optionalMultiType)" in body)
+    val primaryBody = body.substringBefore(optionalMultiType)
+        .let { if ("," in it) it.substringBeforeLast(",") else it.substringBeforeLast("(") + "(" }
+        .plus(body.substringAfter(optionalMultiType))
+
+    return sequenceOf(primaryBody) +
+            newBodies(
+                body = body.replace(optionalMultiType, ": $multiType"),
+                multiType = multiType
+            )
 }
 
 private fun String.containedTypes(): Sequence<String> {
