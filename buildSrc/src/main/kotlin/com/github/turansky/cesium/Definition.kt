@@ -13,7 +13,12 @@ private val MULTI_TYPES = listOf(
     "PostProcessStage | PostProcessStageComposite",
     "Cartesian3 | HeadingPitchRange",
     "DataSource | Promise<DataSource>",
+
     "KmlTourFlyTo | KmlTourWait",
+    "KmlCamera | KmlLookAt",
+
+    "ImageryProvider | TerrainProvider",
+    "Promise<object> | any",
 
     "string | number"
 )
