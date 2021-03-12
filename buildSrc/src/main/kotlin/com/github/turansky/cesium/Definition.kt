@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 private val TOP_REGEX = Regex("""(.+?\*/)\n\s*(.+)""", RegexOption.DOT_MATCHES_ALL)
-private val FUN_START_REGEX = Regex("""^[\w\d]+\(""")
+private val FUN_START_REGEX = Regex("""^(static )?[\w\d]+\(""")
 
 private val MULTI_TYPES = listOf(
     "Resource | string | Document | Blob",
@@ -10,6 +10,7 @@ private val MULTI_TYPES = listOf(
     "Resource | string",
 
     "HTMLImageElement | HTMLCanvasElement | string | Resource | Billboard.CreateImageCallback",
+    "PostProcessStage | PostProcessStageComposite",
     "Cartesian3 | HeadingPitchRange",
     "DataSource | Promise<DataSource>",
     "KmlTourFlyTo | KmlTourWait",
@@ -51,7 +52,7 @@ internal fun Definition.flatten(): Sequence<Definition> {
         .substringBeforeLast(")")
 
     val multiType = MULTI_TYPES
-        .firstOrNull { it in parameters }
+        .firstOrNull { it in parameters && "$it;" !in parameters }
         ?: return sequenceOf(this)
 
     return multiType.splitToSequence(" | ")
