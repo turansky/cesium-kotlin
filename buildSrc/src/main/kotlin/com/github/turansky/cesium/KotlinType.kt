@@ -64,21 +64,7 @@ internal fun kotlinType(
         return type
 
     if (type == "number") {
-        return when {
-            name == null -> "Double"
-
-            name == "index" -> "Int"
-            name == "key" -> "Int"
-            name == "level" -> "Int"
-            name == "length" -> "Int"
-
-            name.endsWith("Index") -> "Int"
-            name.endsWith("Key") -> "Int"
-            name.endsWith("Level") -> "Int"
-            name.endsWith("Length") -> "Int"
-
-            else -> "Double"
-        }
+        return if (isInteger(name)) "Int" else "Double"
     }
 
     if (STANDARD_TYPE_MAP.containsKey(type))
