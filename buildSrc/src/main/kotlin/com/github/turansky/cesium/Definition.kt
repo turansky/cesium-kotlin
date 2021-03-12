@@ -9,6 +9,9 @@ private val MULTI_TYPES = listOf(
     "Resource | string | any",
     "Resource | string",
 
+    "Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud" +
+            " | Promise<Entity | Entity[] | EntityCollection | DataSource | ImageryLayer | Cesium3DTileset | TimeDynamicPointCloud>",
+
     "HTMLImageElement | HTMLCanvasElement | string | Resource | Billboard.CreateImageCallback",
     "PostProcessStage | PostProcessStageComposite",
     "Cartesian3 | HeadingPitchRange",
@@ -46,7 +49,7 @@ internal fun parseTopDefinition(
     }.flatten()
 }
 
-internal fun Definition.flatten(): Sequence<Definition> {
+private fun Definition.flatten(): Sequence<Definition> {
     if (!body.startsWith("export function ") && FUN_START_REGEX.find(body) == null) {
         return sequenceOf(this)
     }
@@ -55,11 +58,22 @@ internal fun Definition.flatten(): Sequence<Definition> {
         .firstOrNull { (": $it," in body || ": $it)" in body) && "?: $it" !in body }
         ?: return sequenceOf(this)
 
-    return multiType.splitToSequence(" | ")
+    return multiType.containedTypes()
         .mapIndexed { index, type ->
             Definition(
                 doc = if (index == 0) doc else "",
                 body = body.replace(multiType, type)
             )
         }
+}
+
+private fun String.containedTypes(): Sequence<String> {
+    val promiseTypes = substringAfter(" | Promise<").substringBefore(">")
+    if (promiseTypes == this || " | " !in promiseTypes)
+        return splitToSequence(" | ")
+
+    return substringBefore(" | Promise<")
+        .splitToSequence(" | ") +
+            promiseTypes.splitToSequence(" | ")
+                .map { "Promise<$it>" }
 }
