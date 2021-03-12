@@ -14,7 +14,7 @@ internal class Property(
     val type = kotlinType(source.body.substringAfter(": "), name)
 
     override fun toCode(): String {
-        return source.doc + "\n" +
+        return source.doc() + "\n" +
                 (if (readOnly) "val" else "var") +
                 " $name: $type"
     }

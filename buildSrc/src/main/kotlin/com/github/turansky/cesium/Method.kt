@@ -24,7 +24,7 @@ internal class Method(
 
         val returnExpression = returnType?.let { ": $it" } ?: ""
 
-        val doc = source.doc
+        val doc = source.doc()
             .let { if (it.isNotEmpty()) "$it\n" else "" }
 
         return "$doc fun $name ${parameters.toCode()}$returnExpression"

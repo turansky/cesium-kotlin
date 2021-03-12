@@ -24,7 +24,7 @@ internal class Constant(
             type = "Double"
         }
 
-        return source.doc + "\n" +
+        return source.doc() + "\n" +
                 "val $name: $type"
     }
 }

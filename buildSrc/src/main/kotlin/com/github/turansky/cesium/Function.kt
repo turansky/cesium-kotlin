@@ -11,9 +11,10 @@ internal class Function(
         val returnExpression = returnType?.let { ": $it" } ?: ""
         val declaration = "external fun $name ${parameters.toCode()}$returnExpression"
 
-        return if (source.doc.isNotEmpty()) {
+        val doc = source.doc()
+        return if (doc.isNotEmpty()) {
             DEFAULT_PACKAGE +
-                    source.doc +
+                    source.doc() +
                     "\n" +
                     declaration
         } else {

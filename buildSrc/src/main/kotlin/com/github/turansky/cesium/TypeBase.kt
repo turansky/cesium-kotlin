@@ -86,7 +86,7 @@ internal abstract class TypeBase(
 
         val modifier = if (top) "external" else ""
         return header +
-                source.doc +
+                source.doc() +
                 "\n" +
                 "$modifier $typeName $name $body"
     }

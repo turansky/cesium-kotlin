@@ -21,7 +21,7 @@ internal class Enum(
             }
 
         return DEFAULT_PACKAGE +
-                source.doc +
+                source.doc() +
                 "\n\n" +
                 "external enum class $name {\n\n$body\n}"
     }
@@ -39,8 +39,9 @@ internal class EnumConstant(
         source.body.split(" = ")[0]
 
     override fun toCode(): String {
-        return if (source.doc.isNotBlank()) {
-            "${source.doc}\n${name}"
+        val doc = source.doc()
+        return if (doc.isNotBlank()) {
+            "$doc\n${name}"
         } else {
             name
         }

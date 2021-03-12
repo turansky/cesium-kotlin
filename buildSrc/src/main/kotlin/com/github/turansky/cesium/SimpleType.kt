@@ -9,7 +9,7 @@ internal open class SimpleType(
     override val static: Boolean = false
 
     override fun toCode(): String =
-        source.doc +
+        source.doc() +
                 "\n\n" +
                 typeDeclaration(source.body, false)
 }

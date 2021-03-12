@@ -8,7 +8,7 @@ internal class TopType(
 
     override fun toCode(): String =
         DEFAULT_PACKAGE +
-                source.doc +
+                source.doc() +
                 "\n\n" +
                 typeDeclaration(source.body, true)
 

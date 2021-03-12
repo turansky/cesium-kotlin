@@ -30,16 +30,16 @@ private val MULTI_TYPES = listOf(
     "string | number"
 )
 
-internal interface HasDoc {
-    val doc: String
-}
-
 internal data class Definition(
-    override val doc: String,
+    private val doc: String,
     val body: String
-) : HasDoc {
+) {
     val defaultName: String
         get() = body.substringBefore(" ")
+
+    fun doc(): String {
+        return doc
+    }
 }
 
 internal fun parseTopDefinition(
@@ -67,10 +67,14 @@ private fun Definition.flatten(): Sequence<Definition> {
 
     return newBodies(body, multiType)
         .mapIndexed { index, childBody ->
-            Definition(
-                doc = if (index == 0) doc else "",
-                body = childBody
-            )
+            if (index == 0) {
+                copy(body = childBody)
+            } else {
+                Definition(
+                    doc = "",
+                    body = childBody
+                )
+            }
         }
 }
 
