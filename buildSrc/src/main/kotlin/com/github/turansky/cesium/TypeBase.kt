@@ -29,7 +29,9 @@ internal abstract class TypeBase(
 
     fun toCode(top: Boolean): String {
         val constructor = members.firstOrNull() as? Constructor
-        val constructorBody = constructor?.toCode() ?: ""
+        val constructorBody = constructor?.toCode()
+            ?.removePrefix("constructor")
+            ?: ""
 
         val companionMembers = companion?.members
             ?.filterNot { it.isNestedType() }
@@ -42,7 +44,7 @@ internal abstract class TypeBase(
 
         var body = members
             .asSequence()
-            .filter { it !is Constructor }
+            .filter { it != constructor }
             .filter { staticBody || !it.static }
             .plus(nestedTypes)
             .map { it.toCode() }

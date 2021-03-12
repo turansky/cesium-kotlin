@@ -16,8 +16,14 @@ internal class Constructor(
         p != null && p.name == "options" && p.optional
     }
 
-    override fun toCode(): String =
+    override fun toCode(): String {
         if (!hiddenOptions) {
-            parameters.toCode()
-        } else ""
+            val params = parameters.toCode()
+            if (params.isNotEmpty()) {
+                return "constructor$params"
+            }
+        }
+
+        return ""
+    }
 }

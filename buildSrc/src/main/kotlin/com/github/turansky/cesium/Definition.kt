@@ -36,10 +36,9 @@ internal fun parseTopDefinition(
         TOP_REGEX.find(source)!!
             .groupValues
             .let { Definition(it[1], it[2]) }
-            .flatten()
     } else {
-        sequenceOf(Definition("", source))
-    }
+        Definition("", source)
+    }.flatten()
 }
 
 internal fun Definition.flatten(): Sequence<Definition> {
@@ -47,12 +46,8 @@ internal fun Definition.flatten(): Sequence<Definition> {
         return sequenceOf(this)
     }
 
-    val parameters = body
-        .substringAfter("(")
-        .substringBeforeLast(")")
-
     val multiType = MULTI_TYPES
-        .firstOrNull { it in parameters && "$it;" !in parameters }
+        .firstOrNull { (": $it," in body || ": $it)" in body) && "?: $it" !in body }
         ?: return sequenceOf(this)
 
     return multiType.splitToSequence(" | ")
