@@ -34,6 +34,7 @@ private val STANDARD_TYPE_MAP = mapOf(
     "HTMLVideoElement" to "org.w3c.dom.HTMLVideoElement",
     "HTMLIFrameElement" to "org.w3c.dom.HTMLIFrameElement",
 
+    "Document" to "org.w3c.dom.Document",
     "XMLDocument" to "org.w3c.dom.XMLDocument",
 
     "ImageData" to "org.w3c.dom.ImageData",
