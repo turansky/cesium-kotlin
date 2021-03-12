@@ -8,6 +8,12 @@ private const val PROMISE = "kotlin.js.Promise"
 private val CLASS_REGEX = Regex("""[\w\d]+""")
 private const val CALL_DELIMITER = "."
 
+private val WHITE_LIST = setOf(
+    "binarySearchComparator",
+    "mergeSortComparator",
+    "requestAnimationFrameCallback"
+)
+
 private val STANDARD_TYPE_MAP = mapOf(
     "any" to "Any",
     "object" to "Any",
@@ -52,6 +58,9 @@ private val STANDARD_TYPE_MAP = mapOf(
 internal fun kotlinType(
     type: String
 ): String {
+    if (type in WHITE_LIST)
+        return type
+
     if (STANDARD_TYPE_MAP.containsKey(type))
         return STANDARD_TYPE_MAP.getValue(type)
 
