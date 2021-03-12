@@ -59,16 +59,31 @@ private fun Definition.flatten(): Sequence<Definition> {
     }
 
     val multiType = MULTI_TYPES
-        .firstOrNull { (": $it," in body || ": $it)" in body) && "?: $it" !in body }
+        .firstOrNull { ": $it," in body || ": $it)" in body }
         ?: return sequenceOf(this)
 
-    return multiType.containedTypes()
-        .mapIndexed { index, type ->
+    return newBodies(body, multiType)
+        .mapIndexed { index, childBody ->
             Definition(
                 doc = if (index == 0) doc else "",
-                body = body.replace(multiType, type)
+                body = childBody
             )
         }
+}
+
+private fun newBodies(
+    body: String,
+    multiType: String
+): Sequence<String> {
+    val bodies = multiType.containedTypes()
+        .map { type -> body.replace(multiType, type) }
+
+    return if ("?: $multiType" in body) {
+        require("?: $multiType)" in body)
+        sequenceOf(body)
+    } else {
+        bodies
+    }
 }
 
 private fun String.containedTypes(): Sequence<String> {
