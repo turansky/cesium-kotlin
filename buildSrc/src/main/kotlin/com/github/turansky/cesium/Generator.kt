@@ -11,9 +11,9 @@ internal fun generateKotlinDeclarations(
 
     parseDeclarations(definitionsFile)
         .asSequence()
-        .sortedBy(Declaration::fileName)
+        .sortedBy(Declaration::name)
         .forEach { declaration ->
-            val file = cesiumDir.resolve("${declaration.fileName}.kt")
+            val file = cesiumDir.resolve("${declaration.name}.kt")
             if (!file.exists()) {
                 file.writeText(declaration.toCode())
             } else {

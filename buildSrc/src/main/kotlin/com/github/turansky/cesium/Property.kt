@@ -6,7 +6,7 @@ internal class Property(
     private val data = source.body.substringBefore(": ")
         .split(" ")
 
-    private val name: String = data.last()
+    override val name: String = data.last()
     private val modifiers = data.dropLast(1)
     override val static = "static" in modifiers
     val readOnly = "readonly" in modifiers

@@ -1,8 +1,11 @@
 package com.github.turansky.cesium
 
 internal open class SimpleType(
-    override val source: Definition
+    final override val source: Definition
 ) : Member() {
+    override val name: String =
+        source.defaultName
+
     override val static: Boolean = false
 
     override fun toCode(): String =

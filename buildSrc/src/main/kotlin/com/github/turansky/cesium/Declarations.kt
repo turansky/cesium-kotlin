@@ -23,32 +23,32 @@ internal fun parseDeclarations(
 
     val classMap = declarations.asSequence()
         .filterIsInstance<Class>()
-        .associateBy { it.fileName }
+        .associateBy { it.name }
 
     // TODO: remove temp hack
     declarations.removeAll {
-        it.fileName == "DictionaryLike"
+        it.name == "DictionaryLike"
     }
 
     declarations.removeAll {
-        it is Interface && classMap.containsKey(it.fileName)
+        it is Interface && classMap.containsKey(it.name)
     }
 
     val interfaceMap = declarations.asSequence()
         .filterIsInstance<Interface>()
-        .associateBy { it.fileName }
+        .associateBy { it.name }
 
     declarations.removeAll {
         when {
             it !is Namespace -> false
 
-            classMap.containsKey(it.fileName) -> {
-                classMap.getValue(it.fileName).companion = it
+            classMap.containsKey(it.name) -> {
+                classMap.getValue(it.name).companion = it
                 true
             }
 
-            interfaceMap.containsKey(it.fileName) -> {
-                interfaceMap.getValue(it.fileName).companion = it
+            interfaceMap.containsKey(it.name) -> {
+                interfaceMap.getValue(it.name).companion = it
                 true
             }
 

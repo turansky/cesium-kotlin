@@ -3,7 +3,7 @@ package com.github.turansky.cesium
 internal class Function(
     override val source: Definition
 ) : Declaration() {
-    private val name = source.parseFunctionName()
+    override val name = source.parseFunctionName()
     private val parameters = source.parseFunctionParameters()
     private val returnType = source.parseFunctionReturnType()
 

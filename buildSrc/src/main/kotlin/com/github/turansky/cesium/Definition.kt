@@ -37,7 +37,10 @@ internal interface HasDoc {
 internal data class Definition(
     override val doc: String,
     val body: String
-) : HasDoc
+) : HasDoc {
+    val defaultName: String
+        get() = body.substringBefore(" ")
+}
 
 internal fun parseTopDefinition(
     data: String

@@ -3,6 +3,9 @@ package com.github.turansky.cesium
 internal class Enum(
     override val source: Definition
 ) : Declaration() {
+    override val name: String =
+        source.defaultName
+
     override fun toCode(): String {
         val body = source.body
             .substringAfter("\n    ")
@@ -20,7 +23,7 @@ internal class Enum(
         return DEFAULT_PACKAGE +
                 source.doc +
                 "\n\n" +
-                "external enum class $fileName {\n\n$body\n}"
+                "external enum class $name {\n\n$body\n}"
     }
 
     companion object {
@@ -32,8 +35,10 @@ internal class Enum(
 internal class EnumConstant(
     override val source: Definition
 ) : Declaration() {
+    override val name: String =
+        source.body.split(" = ")[0]
+
     override fun toCode(): String {
-        val name = source.body.split(" = ")[0]
         return if (source.doc.isNotBlank()) {
             "${source.doc}\n${name}"
         } else {

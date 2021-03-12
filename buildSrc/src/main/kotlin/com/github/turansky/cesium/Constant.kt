@@ -3,6 +3,9 @@ package com.github.turansky.cesium
 internal class Constant(
     override val source: Definition
 ) : Member() {
+    override val name: String
+        get() = TODO()
+
     override val static = false
 
     override fun toCode(): String {

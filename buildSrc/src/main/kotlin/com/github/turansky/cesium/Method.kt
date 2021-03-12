@@ -3,7 +3,7 @@ package com.github.turansky.cesium
 internal class Method(
     override val source: Definition
 ) : Member() {
-    private val name = source.parseFunctionName()
+    override val name = source.parseFunctionName()
 
     private val modifiers = source.body
         .substringBefore("(")

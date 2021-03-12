@@ -3,6 +3,9 @@ package com.github.turansky.cesium
 internal class Constructor(
     override val source: Definition
 ) : Member() {
+    override val name: String
+        get() = TODO()
+
     override val static: Boolean = false
 
     private val parameters = source.body

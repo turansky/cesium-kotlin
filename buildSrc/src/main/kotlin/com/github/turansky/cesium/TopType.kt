@@ -3,6 +3,9 @@ package com.github.turansky.cesium
 internal class TopType(
     override val source: Definition
 ) : Declaration() {
+    override val name: String =
+        source.defaultName
+
     override fun toCode(): String =
         DEFAULT_PACKAGE +
                 source.doc +

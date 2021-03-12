@@ -5,6 +5,9 @@ import com.github.turansky.cesium.Suppress.TOPLEVEL_TYPEALIASES_ONLY
 internal abstract class TypeBase(
     final override val source: Definition
 ) : Declaration(), HasMembers {
+    override val name: String =
+        source.defaultName
+
     abstract val typeName: String
     abstract val companion: HasMembers?
     open val staticBody: Boolean = false
@@ -74,7 +77,7 @@ internal abstract class TypeBase(
 
         // TODO: move cleanup to separate method
         body = "$constructorBody {\n$body\n}"
-            .replace(": $fileName.", ": ")
+            .replace(": $name.", ": ")
 
         val header = if (top) {
             suppressHeader +
@@ -85,7 +88,7 @@ internal abstract class TypeBase(
         return header +
                 source.doc +
                 "\n" +
-                "$modifier $typeName $fileName $body"
+                "$modifier $typeName $name $body"
     }
 }
 
@@ -97,6 +100,6 @@ private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
         return { true }
 
     return {
-        it !is SimpleType || it.fileName != "ConstructorOptions"
+        it !is SimpleType || it.name != "ConstructorOptions"
     }
 }
