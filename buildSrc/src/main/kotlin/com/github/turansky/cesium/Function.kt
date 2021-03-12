@@ -9,11 +9,16 @@ internal class Function(
 
     override fun toCode(): String {
         val returnExpression = returnType?.let { ": $it" } ?: ""
+        val declaration = "external fun $name ${parameters.toCode()}$returnExpression"
 
-        return DEFAULT_PACKAGE +
-                source.doc +
-                "\n" +
-                "external fun $name ${parameters.toCode()}$returnExpression"
+        return if (source.doc.isNotEmpty()) {
+            DEFAULT_PACKAGE +
+                    source.doc +
+                    "\n" +
+                    declaration
+        } else {
+            declaration
+        }
     }
 
     companion object {

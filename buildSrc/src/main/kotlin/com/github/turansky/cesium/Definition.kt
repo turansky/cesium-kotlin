@@ -42,8 +42,7 @@ internal fun parseTopDefinition(
 }
 
 internal fun Definition.flatten(): Sequence<Definition> {
-    // if (body.startsWith("export function ")) {
-    if (FUN_START_REGEX.find(body) == null) {
+    if (!body.startsWith("export function ") && FUN_START_REGEX.find(body) == null) {
         return sequenceOf(this)
     }
 

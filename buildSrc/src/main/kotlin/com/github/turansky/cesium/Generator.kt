@@ -13,8 +13,12 @@ internal fun generateKotlinDeclarations(
         .asSequence()
         .sortedBy(Declaration::fileName)
         .forEach { declaration ->
-            cesiumDir.resolve("${declaration.fileName}.kt")
-                .also { check(!it.exists()) }
-                .writeText(declaration.toCode())
+            val file = cesiumDir.resolve("${declaration.fileName}.kt")
+            if (!file.exists()) {
+                file.writeText(declaration.toCode())
+            } else {
+                // for functions with union type parameters
+                file.appendText("\n\n" + declaration.toCode())
+            }
         }
 }
