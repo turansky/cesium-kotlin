@@ -19,6 +19,9 @@ internal class Method(
         if (name == "toString" && parameters.isEmpty())
             return ""
 
+        if (name == "equals" && parameters.size == 1)
+            return ""
+
         val returnExpression = returnType?.let { ": $it" } ?: ""
 
         val doc = source.doc
