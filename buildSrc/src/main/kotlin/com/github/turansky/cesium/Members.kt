@@ -11,7 +11,7 @@ internal fun members(
         .removeSuffix(";\n}")
         .splitToSequence(";\n    /")
         .map { if (it.startsWith("**")) "/$it" else it }
-        .map { parseTopDefinition(it) }
+        .flatMap { parseTopDefinition(it) }
         .map { it.toMember() }
         .toList()
 }

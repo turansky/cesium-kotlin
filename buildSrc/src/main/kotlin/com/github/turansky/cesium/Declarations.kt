@@ -73,7 +73,7 @@ private fun readDeclarations(
         .filter { it.isNotBlank() }
         .map { "/**$it" }
         .flatMap { it.split("\n\nexport ").asSequence() }
-        .map { parseTopDefinition(it) }
+        .flatMap { parseTopDefinition(it) }
         .map { source ->
             val body = source.body
             val prefix = FACTORY_MAP.keys

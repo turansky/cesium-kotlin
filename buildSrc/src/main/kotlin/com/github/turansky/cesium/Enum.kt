@@ -11,7 +11,7 @@ internal class Enum(
             .split(Regex(""",\n\s+"""))
             .asSequence()
             .map { it.replace("__COMMA__\n", ",\n") }
-            .map { parseTopDefinition(it) }
+            .flatMap { parseTopDefinition(it) }
             .map { EnumConstant(it) }
             .joinToString(separator = ",\n\n", postfix = ",\n\n;\n") {
                 it.toCode()
