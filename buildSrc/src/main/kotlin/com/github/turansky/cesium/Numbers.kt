@@ -21,6 +21,8 @@ internal fun isInteger(name: String?): Boolean {
     return when {
         name in INTEGER_NAMES -> true
 
+        name == "focalLength" -> false
+
         name.endsWith("Index") -> true
         name.endsWith("Level") -> true
         name.endsWith("Length") -> true
