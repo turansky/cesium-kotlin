@@ -11,7 +11,7 @@ internal class Property(
     override val static = "static" in modifiers
     val readOnly = "readonly" in modifiers
 
-    val type = kotlinType(source.body.substringAfter(": "))
+    val type = kotlinType(source.body.substringAfter(": "), name)
 
     override fun toCode(): String {
         return source.doc + "\n" +

@@ -57,10 +57,29 @@ private val STANDARD_TYPE_MAP = mapOf(
 )
 
 internal fun kotlinType(
-    type: String
+    type: String,
+    name: String? = null
 ): String {
     if (type in WHITE_LIST)
         return type
+
+    if (type == "number") {
+        return when {
+            name == null -> "Double"
+
+            name == "index" -> "Int"
+            name == "key" -> "Int"
+            name == "level" -> "Int"
+            name == "length" -> "Int"
+
+            name.endsWith("Index") -> "Int"
+            name.endsWith("Key") -> "Int"
+            name.endsWith("Level") -> "Int"
+            name.endsWith("Length") -> "Int"
+
+            else -> "Double"
+        }
+    }
 
     if (STANDARD_TYPE_MAP.containsKey(type))
         return STANDARD_TYPE_MAP.getValue(type)

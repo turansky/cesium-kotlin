@@ -9,7 +9,7 @@ internal class Parameter(
         .let { if (it == "object") "obj" else it }
 
     private val type: String by lazy {
-        kotlinType(body.substringAfter(": "))
+        kotlinType(body.substringAfter(": "), name)
     }
 
     private val vararg: Boolean by lazy { "..." in body.substringBefore("{") }
