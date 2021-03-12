@@ -4,7 +4,15 @@ private val INTEGER_NAMES = setOf(
     "index",
     "key",
     "level",
-    "length"
+    "length",
+
+    "year",
+    "month",
+    "day",
+    "hour",
+    "minute",
+    "second",
+    "millisecond"
 )
 
 internal fun isInteger(name: String?): Boolean {
