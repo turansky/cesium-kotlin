@@ -17,5 +17,5 @@ private constructor(
             : this(TOP_TEMPLATE.replace("{top}", top.name), top is IType)
 
     constructor(type: IType, member: IMember)
-            : this(MEMBER_TEMPLATE.replace("{type}", type.name).replace("{member}", member.name))
+            : this(MEMBER_TEMPLATE.replace("{type}", type.name).replace("{member}", member.docName))
 }
