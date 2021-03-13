@@ -163,7 +163,14 @@ private fun formatDefaultValue(source: String): String {
     if (literal)
         return "`$source`"
 
-    if (source.startsWith("new ")) {
+    val call = when {
+        source.startsWith("new ") -> true
+        source.startsWith("Cartesian2(") -> true
+        source.startsWith("Cartesian3(") -> true
+        else -> source == "createWorldImagery()" || source == "createGuid()"
+    }
+
+    if (call) {
         val label = source.removePrefix("new ")
         val type = label.substringBefore("(")
         return "[$label][$type]"
@@ -177,6 +184,7 @@ private fun formatDefaultValue(source: String): String {
         source == "relativeEpsilon" -> true
         source.startsWith("scene.") -> true
         source.startsWith("viewer.") -> true
+        source.startsWith("imageryProvider.") -> true
 
         else -> false
     }
@@ -187,6 +195,7 @@ private fun formatDefaultValue(source: String): String {
     if (source == "packedArray.length")
         return "[packedArray.size]"
 
+    println(source)
     return "`$source`"
 }
 
