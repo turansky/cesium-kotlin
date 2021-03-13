@@ -148,6 +148,12 @@ private fun formatDefaultValue(source: String): String {
     if (literal)
         return "`$source`"
 
+    if (source.startsWith("new ")) {
+        val label = source.removePrefix("new ")
+        val type = label.substringBefore("(")
+        return "[$label][$type]"
+    }
+
     return "`$source`"
 }
 
