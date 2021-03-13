@@ -4,7 +4,7 @@ import com.github.turansky.cesium.Suppress.TOPLEVEL_TYPEALIASES_ONLY
 
 internal abstract class TypeBase(
     final override val source: Definition
-) : Declaration(), HasMembers {
+) : Declaration(), IType, HasMembers {
     override val name: String =
         source.defaultName
 
