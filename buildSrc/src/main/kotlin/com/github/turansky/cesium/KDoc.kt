@@ -18,7 +18,7 @@ private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
 private val LINK_TYPE_REGEX = Regex("""\{@link ([\w\d]+)}""")
 private val LINK_MEMBER_REGEX = Regex("""\{@link ([\w\d]+)[#.]([\w\d]+)}""")
-private val LINK_HTTP_NAMED_1_REGEX = Regex("""\{@link (http.+?)\|(.+?)}""")
+private val LINK_HTTP_NAMED_1_REGEX = Regex("""\{@link (http.+?)\|\n?(.+?)}""")
 private val LINK_HTTP_NAMED_2_REGEX = Regex("""\[(.+?)]\{@link (http.+?)}""")
 private val LINK_HTTP_REGEX = Regex("""\{@link (http.+?)}""")
 
