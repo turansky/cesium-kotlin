@@ -13,7 +13,7 @@ private val PRE_REGEX = Regex("""<pre>(.+?)</pre>""", RegexOption.DOT_MATCHES_AL
 private val CODE_REGEX = Regex("""<code>(.+?)</code>""")
 private val CODE_MULTILINE_REGEX = Regex("""<code>(.+?)</code>""", RegexOption.DOT_MATCHES_ALL)
 
-private val UL_REGEX = Regex("""<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL)
+private val UL_REGEX = Regex(""" *<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL)
 private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
 private val KDOC_KEYWORDS = setOf("@example", "@param", "@returns", "@property")
@@ -66,6 +66,7 @@ private fun listItems(source: String): String =
         .map { it.groupValues[1] }
         .map { it.trim() }
         .map { "- $it" }
+        .map { it.multiline() }
         .joinToString("\n")
 
 private fun formatBlocks(source: String): String =
