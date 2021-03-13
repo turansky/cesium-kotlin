@@ -25,6 +25,14 @@ private val LINK_HTTP_REGEX = Regex("""\{@link (http.+?)}""")
 private val KDOC_KEYWORDS = setOf("@example", "@param", "@returns", "@property")
 private const val DELIMITER = "--DEL--"
 
+private val CONSTANTS = setOf(
+    "true",
+    "false",
+
+    "{}",
+    "[]"
+)
+
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
         return ""
@@ -120,13 +128,20 @@ private fun formatParam(source: String): String {
         description = body.substringAfter(" ")
     }
 
-    val defaultLines = default?.let { arrayOf("Default value - `$it`") }
+    val defaultLines = default?.let { arrayOf("Default value - ${formatDefaultValue(it)}") }
         ?: emptyArray()
 
     val desc = description.removePrefix("- ")
         .multiline(*defaultLines)
 
     return "@param [$name] $desc"
+}
+
+private fun formatDefaultValue(source: String): String {
+    if (source in CONSTANTS || source.toDoubleOrNull() != null)
+        return "`$source`"
+
+    return "`$source`"
 }
 
 private fun String.multiline(
