@@ -14,6 +14,7 @@ internal abstract class TypeBase(
 
     override val members by lazy {
         members(source.body)
+            .onEach { it.parent = this }
     }
 
     open fun suppresses(): List<Suppress> {
