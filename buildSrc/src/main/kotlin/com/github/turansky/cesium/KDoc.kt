@@ -69,9 +69,10 @@ private fun listItems(source: String): String =
         .joinToString("\n")
 
 private fun formatBlocks(source: String): String =
-    KDOC_KEYWORDS.asSequence()
+    KDOC_KEYWORDS
         .fold(source) { acc, keyword ->
             acc.replace("$keyword ", "$DELIMITER$keyword ")
+                .replace("$keyword\n", "$DELIMITER$keyword\n")
         }
         .splitToSequence(DELIMITER)
         .map { it.trim() }
@@ -81,6 +82,7 @@ private fun formatBlocks(source: String): String =
 
 private fun formatBlock(source: String): String =
     when {
+        source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n$it\n```" }
         source.startsWith("@returns") -> source.replace("@returns", "@return")
         else -> source
     }
