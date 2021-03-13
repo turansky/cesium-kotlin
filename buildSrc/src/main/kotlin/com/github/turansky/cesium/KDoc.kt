@@ -112,5 +112,5 @@ private fun formatParam(source: String): String {
         .filterNotNull()
         .joinToString(" = ")
 
-    return "@param [$declaration] $description"
+    return "@param [$declaration] ${description.removePrefix("- ")}"
 }
