@@ -79,7 +79,7 @@ internal fun kdoc(doc: String, link: DocLink?): String {
 
     val links = sequenceOf(link)
         .filterNotNull()
-        .map { """@see <a href="${it.href}">Online Documentation</a>""" }
+        .map { seeDoc(it) }
 
     return source
         .splitToSequence("\n")
@@ -91,6 +91,9 @@ internal fun kdoc(doc: String, link: DocLink?): String {
             postfix = "\n */"
         )
 }
+
+private fun seeDoc(link: DocLink): String =
+    """@see <a href="${link.href}">Online Documentation</a>"""
 
 private fun listItems(source: String): String =
     LI_REGEX.findAll(source)
