@@ -17,7 +17,7 @@ private val UL_REGEX = Regex(""" *<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL
 private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
 private val KDOC_KEYWORDS = setOf("@example", "@param", "@returns", "@property")
-private val DELIMITER = "--DEL--"
+private const val DELIMITER = "--DEL--"
 
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
@@ -109,18 +109,20 @@ private fun formatParam(source: String): String {
         description = body.substringAfter(" ")
     }
 
-    val declaration = sequenceOf(name, default)
-        .filterNotNull()
-        .joinToString(" = ")
+    val defaultLines = default?.let { arrayOf("Default value - `$it`") }
+        ?: emptyArray()
 
     val desc = description.removePrefix("- ")
-        .multiline()
+        .multiline(*defaultLines)
 
-    return "@param [$declaration] $desc"
+    return "@param [$name] $desc"
 }
 
-private fun String.multiline(): String =
+private fun String.multiline(
+    vararg additionalLines: String
+): String =
     splitToSequence("\n")
+        .plus(additionalLines)
         .map { it.trim() }
         .mapIndexed { index, line -> if (index == 0) line else "  $line" }
         .joinToString("\n")
