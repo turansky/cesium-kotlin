@@ -154,6 +154,9 @@ private fun formatDefaultValue(source: String): String {
         source == "document" -> true
         source.startsWith("document.") -> true
 
+        source.startsWith("options.") -> true
+        source.startsWith("!options.") -> true
+
         else -> false
     }
 
@@ -166,16 +169,24 @@ private fun formatDefaultValue(source: String): String {
         return "[$label][$type]"
     }
 
-    if (TYPE_REGEX.matches(source) || CONSTANT_REGEX.matches(source) || MEMBER_REGEX.matches(source))
-        return "[$source]"
+    val link = when {
+        TYPE_REGEX.matches(source) -> true
+        CONSTANT_REGEX.matches(source) -> true
+        MEMBER_REGEX.matches(source) -> true
 
-    if (source == "relativeEpsilon")
+        source == "relativeEpsilon" -> true
+        source.startsWith("scene.") -> true
+        source.startsWith("viewer.") -> true
+
+        else -> false
+    }
+
+    if (link)
         return "[$source]"
 
     if (source == "packedArray.length")
         return "[packedArray.size]"
 
-    println(source)
     return "`$source`"
 }
 
