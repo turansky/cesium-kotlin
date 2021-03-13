@@ -33,6 +33,8 @@ private val CONSTANTS = setOf(
     "[]"
 )
 
+private val CONSTANT_REGEX = Regex("""([\w\d]+)\.([A-Z\d_]+)""")
+
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
         return ""
@@ -153,6 +155,9 @@ private fun formatDefaultValue(source: String): String {
         val type = label.substringBefore("(")
         return "[$label][$type]"
     }
+
+    if (CONSTANT_REGEX.matches(source))
+        return "[$source]"
 
     return "`$source`"
 }
