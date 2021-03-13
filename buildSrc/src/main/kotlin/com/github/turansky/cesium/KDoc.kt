@@ -112,5 +112,15 @@ private fun formatParam(source: String): String {
         .filterNotNull()
         .joinToString(" = ")
 
-    return "@param [$declaration] ${description.removePrefix("- ")}"
+    val desc = description.removePrefix("- ")
+        .multiline()
+
+    return "@param [$declaration] $desc"
 }
+
+private fun String.multiline(): String =
+    splitToSequence("\n")
+        .map { it.trim() }
+        .mapIndexed { index, line -> if (index == 0) line else "  $line" }
+        .joinToString("\n")
+
