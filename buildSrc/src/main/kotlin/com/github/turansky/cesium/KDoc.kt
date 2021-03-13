@@ -44,7 +44,7 @@ internal fun kdoc(doc: String, link: DocLink?): String {
     if (doc.isEmpty())
         return ""
 
-    val source = doc.removePrefix("/**\n")
+    var source = doc.removePrefix("/**\n")
         .substringBeforeLast("\n")
         .trimMargin("*")
         .splitToSequence("\n")
@@ -77,13 +77,18 @@ internal fun kdoc(doc: String, link: DocLink?): String {
         .trim()
         .let(::formatBlocks)
 
-    val links = sequenceOf(link)
+    val seeLink = link?.let { seeDoc(it) }
+    if (link?.typeMode == true && "\n@param " in source) {
+        checkNotNull(seeLink)
+        source = source.replaceFirst("\n@param ", "\n$seeLink\n\n@constructor\n@param ")
+    }
+
+    val seeLinks = sequenceOf(seeLink)
         .filterNotNull()
-        .map { seeDoc(it) }
 
     return source
         .splitToSequence("\n")
-        .plus(links)
+        .plus(seeLinks)
         .map { " * $it" }
         .joinToString(
             prefix = "/**\n",
