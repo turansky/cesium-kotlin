@@ -1,5 +1,7 @@
 package com.github.turansky.cesium
 
-internal interface IType {
+internal interface ITop {
     val name: String
 }
+
+internal interface IType : ITop
