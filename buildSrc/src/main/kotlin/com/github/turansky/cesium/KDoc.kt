@@ -83,6 +83,34 @@ private fun formatBlocks(source: String): String =
 private fun formatBlock(source: String): String =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n$it\n```" }
+        source.startsWith("@param") -> formatParam(source)
         source.startsWith("@returns") -> source.replace("@returns", "@return")
         else -> source
     }
+
+private fun formatParam(source: String): String {
+    val body = source.removePrefix("@param ")
+
+    val name: String
+    val default: String?
+    val description: String
+
+    if (body.startsWith("[")) {
+        val data = body.removePrefix("[")
+            .substringBefore("] ")
+            .split(" = ")
+        name = data.first()
+        default = data.getOrNull(1)
+        description = body.substringAfter("] ")
+    } else {
+        name = body.substringBefore(" ")
+        default = null
+        description = body.substringAfter(" ")
+    }
+
+    val declaration = sequenceOf(name, default)
+        .filterNotNull()
+        .joinToString(" = ")
+
+    return "@param [$declaration] $description"
+}
