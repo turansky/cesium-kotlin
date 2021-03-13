@@ -7,10 +7,14 @@ private val SPAN_1_REGEX = Regex("""\n<span .+?</span>""", RegexOption.DOT_MATCH
 private val SPAN_2_REGEX = Regex("""<span .+?</span>\n""", RegexOption.DOT_MATCHES_ALL)
 private val P_REGEX = Regex("""<p> ?(.+?)</p>""", RegexOption.DOT_MATCHES_ALL)
 private val IMG_REGEX = Regex("""<img .+? />\n""")
+
 private val PRE_CODE_REGEX = Regex("""<pre><code>(.+?)</code></pre>""", RegexOption.DOT_MATCHES_ALL)
 private val PRE_REGEX = Regex("""<pre>(.+?)</pre>""", RegexOption.DOT_MATCHES_ALL)
 private val CODE_REGEX = Regex("""<code>(.+?)</code>""")
 private val CODE_MULTILINE_REGEX = Regex("""<code>(.+?)</code>""", RegexOption.DOT_MATCHES_ALL)
+
+private val UL_REGEX = Regex("""<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL)
+private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
@@ -39,6 +43,7 @@ internal fun kdoc(doc: String): String {
         .replace(CODE_REGEX, "`$1`")
         .replace(CODE_MULTILINE_REGEX, "```$1```")
         .replace("<p>\n", "")
+        .replace(UL_REGEX) { listItems(it.groupValues[1]) }
         .replace("\n\n\n", "\n\n")
         .trim()
 
@@ -51,3 +56,10 @@ internal fun kdoc(doc: String): String {
             postfix = "\n */"
         )
 }
+
+private fun listItems(source: String): String =
+    LI_REGEX.findAll(source)
+        .map { it.groupValues[1] }
+        .map { it.trim() }
+        .map { "- $it" }
+        .joinToString("\n")
