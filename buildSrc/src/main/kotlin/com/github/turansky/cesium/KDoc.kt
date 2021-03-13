@@ -22,6 +22,7 @@ internal fun kdoc(doc: String): String {
         .replace(SPAN_1_REGEX, "")
         .replace(SPAN_2_REGEX, "")
         .replace("\n<p>\n</p>", "")
+        .replace("<br /><br />", "")
         .replace(P_REGEX, "$1")
         .replace(PRE_CODE_REGEX, "```$1```")
         .replace(PRE_REGEX, "```$1```")
