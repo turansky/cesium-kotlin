@@ -84,7 +84,7 @@ private fun formatBlock(source: String): String =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n$it\n```" }
         source.startsWith("@param") -> formatParam(source)
-        source.startsWith("@returns") -> source.replace("@returns", "@return")
+        source.startsWith("@returns") -> source.replace("@returns", "@return").multiline()
         else -> source
     }
 
