@@ -16,8 +16,9 @@ private val CODE_MULTILINE_REGEX = Regex("""<code>(.+?)</code>""", RegexOption.D
 private val UL_REGEX = Regex(""" *<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL)
 private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
-private val LINK_1_REGEX = Regex("""\{@link ([\w\d]+)}""", RegexOption.DOT_MATCHES_ALL)
-private val LINK_2_REGEX = Regex("""\{@link ([\w\d]+)[#.]([\w\d]+)}""", RegexOption.DOT_MATCHES_ALL)
+private val LINK_1_REGEX = Regex("""\{@link ([\w\d]+)}""")
+private val LINK_2_REGEX = Regex("""\{@link ([\w\d]+)[#.]([\w\d]+)}""")
+private val LINK_3_REGEX = Regex("""\{@link (http.+?)\|(.+?)}""")
 
 private val KDOC_KEYWORDS = setOf("@example", "@param", "@returns", "@property")
 private const val DELIMITER = "--DEL--"
@@ -53,6 +54,7 @@ internal fun kdoc(doc: String): String {
         .replace("\n\n\n", "\n\n")
         .replace(LINK_1_REGEX, "[$1]")
         .replace(LINK_2_REGEX, "[$1.$2]")
+        .replace(LINK_3_REGEX, "[$2]($1)")
         .trim()
         .let(::formatBlocks)
 
