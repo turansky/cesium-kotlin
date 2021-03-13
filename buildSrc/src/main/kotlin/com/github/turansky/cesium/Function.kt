@@ -2,7 +2,7 @@ package com.github.turansky.cesium
 
 internal class Function(
     override val source: Definition
-) : Declaration() {
+) : Declaration(), ITop {
     override val name = source.parseFunctionName()
     private val parameters = source.parseFunctionParameters()
     private val returnType = source.parseFunctionReturnType()
@@ -14,7 +14,7 @@ internal class Function(
         val doc = source.doc()
         return if (doc.isNotEmpty()) {
             DEFAULT_PACKAGE +
-                    source.doc() +
+                    source.doc(DocLink(this)) +
                     "\n" +
                     declaration
         } else {
