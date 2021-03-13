@@ -2,7 +2,7 @@ package com.github.turansky.cesium
 
 internal class Enum(
     override val source: Definition
-) : Declaration() {
+) : Declaration(), IEnum {
     override val name: String =
         source.defaultName
 
@@ -21,7 +21,7 @@ internal class Enum(
             }
 
         return DEFAULT_PACKAGE +
-                source.doc() +
+                source.doc(DocLink(this)) +
                 "\n\n" +
                 "external enum class $name {\n\n$body\n}"
     }
