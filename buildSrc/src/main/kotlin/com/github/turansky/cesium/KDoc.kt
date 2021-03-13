@@ -138,7 +138,14 @@ private fun formatParam(source: String): String {
 }
 
 private fun formatDefaultValue(source: String): String {
-    if (source in CONSTANTS || source.toDoubleOrNull() != null)
+    val literal = when {
+        source in CONSTANTS -> true
+        source.toDoubleOrNull() != null -> true
+        source.startsWith("'") && source.endsWith("'") -> true
+        else -> false
+    }
+
+    if (literal)
         return "`$source`"
 
     return "`$source`"
