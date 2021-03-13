@@ -145,6 +145,9 @@ private fun formatParam(source: String): String {
 }
 
 private fun formatDefaultValue(source: String): String {
+    if (source.startsWith("Cesium."))
+        return "`${source.removePrefix("Cesium.")}`"
+
     val literal = when {
         source in CONSTANTS -> true
         source.toDoubleOrNull() != null -> true
@@ -156,6 +159,7 @@ private fun formatDefaultValue(source: String): String {
 
         source.startsWith("options.") -> true
         source.startsWith("!options.") -> true
+        source.startsWith("entities.") -> true
 
         else -> false
     }
@@ -195,7 +199,6 @@ private fun formatDefaultValue(source: String): String {
     if (source == "packedArray.length")
         return "[packedArray.size]"
 
-    println(source)
     return "`$source`"
 }
 
