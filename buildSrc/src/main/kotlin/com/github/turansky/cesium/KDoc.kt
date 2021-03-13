@@ -4,6 +4,8 @@ private val DIV_REGEX = Regex("""\n<div .+?\n</div>""", RegexOption.DOT_MATCHES_
 private val SPAN_1_REGEX = Regex("""\n<span .+?</span>""", RegexOption.DOT_MATCHES_ALL)
 private val SPAN_2_REGEX = Regex("""<span .+?</span>\n""", RegexOption.DOT_MATCHES_ALL)
 private val P_REGEX = Regex("""<p> ?(.+?)</p>""", RegexOption.DOT_MATCHES_ALL)
+private val PRE_CODE_REGEX = Regex("""<pre><code>(.+?)</code></pre>""", RegexOption.DOT_MATCHES_ALL)
+private val PRE_REGEX = Regex("""<pre>(.+?)</pre>""", RegexOption.DOT_MATCHES_ALL)
 
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
@@ -20,6 +22,8 @@ internal fun kdoc(doc: String): String {
         .replace(SPAN_2_REGEX, "")
         .replace("\n<p>\n</p>", "")
         .replace(P_REGEX, "$1")
+        .replace(PRE_CODE_REGEX, "```$1```")
+        .replace(PRE_REGEX, "```$1```")
         .replace("\n\n\n", "\n\n")
         .trim()
 
