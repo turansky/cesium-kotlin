@@ -16,6 +16,9 @@ private val CODE_MULTILINE_REGEX = Regex("""<code>(.+?)</code>""", RegexOption.D
 private val UL_REGEX = Regex("""<ul>(.+?)</ul>""", RegexOption.DOT_MATCHES_ALL)
 private val LI_REGEX = Regex("""<li>(.+?)</li>""", RegexOption.DOT_MATCHES_ALL)
 
+private val KDOC_KEYWORDS = setOf("@example", "@param", "@returns", "@property")
+private val DELIMITER = "--DEL--"
+
 internal fun kdoc(doc: String): String {
     if (doc.isEmpty())
         return ""
@@ -46,6 +49,7 @@ internal fun kdoc(doc: String): String {
         .replace(UL_REGEX) { listItems(it.groupValues[1]) }
         .replace("\n\n\n", "\n\n")
         .trim()
+        .let(::formatBlocks)
 
     return source
         .splitToSequence("\n")
@@ -63,3 +67,14 @@ private fun listItems(source: String): String =
         .map { it.trim() }
         .map { "- $it" }
         .joinToString("\n")
+
+private fun formatBlocks(source: String): String =
+    KDOC_KEYWORDS.asSequence()
+        .fold(source) { acc, keyword ->
+            acc.replace("$keyword ", "$DELIMITER$keyword ")
+        }
+        .splitToSequence(DELIMITER)
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+        .joinToString("\n")
+
