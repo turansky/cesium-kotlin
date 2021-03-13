@@ -40,7 +40,7 @@ private val TYPE_REGEX = Regex("""[A-Z]\w+""")
 private val CONSTANT_REGEX = Regex("""[A-Z][\w\d]+\.[A-Z\d_]+""")
 private val MEMBER_REGEX = Regex("""[A-Z]\w+\.\w+""")
 
-internal fun kdoc(doc: String): String {
+internal fun kdoc(doc: String, link: DocLink?): String {
     if (doc.isEmpty())
         return ""
 
@@ -77,8 +77,13 @@ internal fun kdoc(doc: String): String {
         .trim()
         .let(::formatBlocks)
 
+    val links = sequenceOf(link)
+        .filterNotNull()
+        .map { """@see <a href="${it.href}">Online Documentation</a>""" }
+
     return source
         .splitToSequence("\n")
+        .plus(links)
         .map { " * $it" }
         .joinToString(
             prefix = "/**\n",

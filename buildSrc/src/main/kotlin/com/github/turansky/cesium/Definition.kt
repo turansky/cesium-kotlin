@@ -37,8 +37,8 @@ internal data class Definition(
     val defaultName: String
         get() = body.substringBefore(" ")
 
-    fun doc(): String =
-        kdoc(doc)
+    fun doc(link: DocLink? = null): String =
+        kdoc(doc, link)
 }
 
 internal fun parseTopDefinition(
