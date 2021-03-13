@@ -172,6 +172,9 @@ private fun formatDefaultValue(source: String): String {
     if (source == "relativeEpsilon")
         return "[$source]"
 
+    if (source == "packedArray.length")
+        return "[packedArray.size]"
+
     println(source)
     return "`$source`"
 }
