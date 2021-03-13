@@ -149,6 +149,11 @@ private fun formatDefaultValue(source: String): String {
         source in CONSTANTS -> true
         source.toDoubleOrNull() != null -> true
         source.startsWith("'") && source.endsWith("'") -> true
+        source.startsWith("{") && source.endsWith("}") -> true
+
+        source == "document" -> true
+        source.startsWith("document.") -> true
+
         else -> false
     }
 
@@ -164,6 +169,10 @@ private fun formatDefaultValue(source: String): String {
     if (TYPE_REGEX.matches(source) || CONSTANT_REGEX.matches(source) || MEMBER_REGEX.matches(source))
         return "[$source]"
 
+    if (source == "relativeEpsilon")
+        return "[$source]"
+
+    println(source)
     return "`$source`"
 }
 
