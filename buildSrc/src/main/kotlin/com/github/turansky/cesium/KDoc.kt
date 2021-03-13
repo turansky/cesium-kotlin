@@ -76,5 +76,11 @@ private fun formatBlocks(source: String): String =
         .splitToSequence(DELIMITER)
         .map { it.trim() }
         .filter { it.isNotEmpty() }
+        .map { formatBlock(it) }
         .joinToString("\n")
 
+private fun formatBlock(source: String): String =
+    when {
+        source.startsWith("@returns") -> source.replace("@returns", "@return")
+        else -> source
+    }
