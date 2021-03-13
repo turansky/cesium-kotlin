@@ -2,6 +2,7 @@ package com.github.turansky.cesium
 
 private val STYLE_REGEX = Regex("""\n<style .+?\n</style>""", RegexOption.DOT_MATCHES_ALL)
 private val DIV_REGEX = Regex("""\n<div .+?\n</div>""", RegexOption.DOT_MATCHES_ALL)
+private val TABLE_REGEX = Regex("""\n\s*<table>.+?</table>""", RegexOption.DOT_MATCHES_ALL)
 private val SPAN_1_REGEX = Regex("""\n<span .+?</span>""", RegexOption.DOT_MATCHES_ALL)
 private val SPAN_2_REGEX = Regex("""<span .+?</span>\n""", RegexOption.DOT_MATCHES_ALL)
 private val P_REGEX = Regex("""<p> ?(.+?)</p>""", RegexOption.DOT_MATCHES_ALL)
@@ -23,6 +24,8 @@ internal fun kdoc(doc: String): String {
         .joinToString("\n")
         .replace(STYLE_REGEX, "")
         .replace(DIV_REGEX, "")
+        .replace("  The bit values are as follows:", "")
+        .replace(TABLE_REGEX, "")
         .replace(SPAN_1_REGEX, "")
         .replace(SPAN_2_REGEX, "")
         .replace("\n<p>\n</p>", "")
