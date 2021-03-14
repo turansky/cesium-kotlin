@@ -1,5 +1,8 @@
 package com.github.turansky.cesium
 
+private val OPTIONS_REGEX = Regex("""options: (\{.+})""", RegexOption.DOT_MATCHES_ALL)
+private val INNER_OPTIONS_REGEX = Regex(""": \{.+}""", RegexOption.DOT_MATCHES_ALL)
+
 internal fun members(
     body: String
 ): List<Member> {
@@ -31,8 +34,18 @@ private fun Definition.toMembers(): Sequence<Member> =
 
         body.startsWith("constructor(")
         -> {
-            val constructorBody = body.removeSurrounding("constructor(", ")")
-            sequenceOf(Constructor(copy(body = constructorBody)))
+            var constructorBody = body.removeSurrounding("constructor(", ")")
+            val options = OPTIONS_REGEX.findAll(constructorBody)
+                .map { it.groupValues[1] }
+                .onEach { constructorBody = constructorBody.replace(it, "ConstructorOptions") }
+                // TODO: support inner options
+                .map { it.replace(INNER_OPTIONS_REGEX, ": any") }
+                .map { "ConstructorOptions = $it" }
+                .map { SimpleType(Definition("", it)) }
+                .toList()
+
+            val constructor = Constructor(copy(body = constructorBody))
+            sequenceOf(constructor) + options
         }
 
         body.startsWith("const ")
