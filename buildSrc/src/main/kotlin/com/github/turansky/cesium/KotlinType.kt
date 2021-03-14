@@ -43,6 +43,7 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "ArrayBuffer" to "org.khronos.webgl.ArrayBuffer",
     "Uint8Array" to "org.khronos.webgl.Uint8Array",
+    "Uint16Array" to "org.khronos.webgl.Uint16Array",
     "Float32Array" to "org.khronos.webgl.Float32Array",
 
     "CameraEventType | any[] | undefined" to "CameraEventType?",
