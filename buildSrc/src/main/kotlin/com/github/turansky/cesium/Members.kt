@@ -38,13 +38,15 @@ private fun Definition.toMembers(): Sequence<Member> =
         body.startsWith("const ")
         -> sequenceOf(Constant(copy(body = body.removePrefix("const "))))
 
-        else -> {
-            val pi = body.indexOf(":")
-            val mi = body.indexOf("(")
-            if (mi == -1 || (pi < mi)) {
-                sequenceOf(Property(this))
-            } else {
-                sequenceOf(Method(this))
-            }
-        }
+        body.isPropertyLike()
+        -> sequenceOf(Property(this))
+
+        else
+        -> sequenceOf(Method(this))
     }
+
+private fun String.isPropertyLike(): Boolean {
+    val pi = indexOf(":")
+    val mi = indexOf("(")
+    return mi == -1 || pi < mi
+}
