@@ -8,7 +8,8 @@ internal fun typeDeclaration(
     return if (body.startsWith("(")) {
         "typealias ${applyCallbackFix(name)} = ${typeBody(body)}"
     } else {
-        (if (top) "external " else "") + "interface $name {}"
+        val modifier = if (top) "external " else ""
+        "$modifier interface $name {\n${optionsBody(body)}\n}"
     }
 }
 
@@ -38,3 +39,23 @@ private fun typeBody(body: String): String {
 
     return "($parameters) -> ${kotlinType(returnType)}"
 }
+
+private fun optionsBody(
+    body: String
+): String {
+    val source = body.removePrefix("{\n")
+        .substringBeforeLast("\n")
+        .trimIndent()
+
+    return source
+        // WA for externalFiles
+        .replace("{\n    [key: string]: Blob;\n}", "any")
+        .splitToSequence(";")
+        .map { it.trim() }
+        .filter { it.isNotEmpty() }
+        .map { Parameter(it) }
+        .onEach { it.supportDefault = false }
+        .map { "var ${it.toCode()}" }
+        .joinToString("\n")
+}
+
