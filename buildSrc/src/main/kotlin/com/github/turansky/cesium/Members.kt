@@ -12,36 +12,39 @@ internal fun members(
         .splitToSequence(";\n    /")
         .map { if (it.startsWith("**")) "/$it" else it }
         .flatMap { parseTopDefinition(it) }
-        .map { it.toMember() }
+        .flatMap { it.toMembers() }
         .toList()
 }
 
-private fun Definition.toMember(): Member =
+private fun Definition.toMembers(): Sequence<Member> =
     when {
         body.startsWith("namespace ") -> {
             val newBody = body
                 .removePrefix("namespace ")
                 .replace("\n    ", "\n")
                 .removeSuffix("\n}")
-            NestedNamespace(copy(body = newBody))
+            sequenceOf(NestedNamespace(copy(body = newBody)))
         }
 
         body.startsWith("type ")
-        -> SimpleType(copy(body = body.removePrefix("type ")))
+        -> sequenceOf(SimpleType(copy(body = body.removePrefix("type "))))
 
         body.startsWith("constructor(")
-        -> Constructor(copy(body = body.removeSurrounding("constructor(", ")")))
+        -> {
+            val constructorBody = body.removeSurrounding("constructor(", ")")
+            sequenceOf(Constructor(copy(body = constructorBody)))
+        }
 
         body.startsWith("const ")
-        -> Constant(copy(body = body.removePrefix("const ")))
+        -> sequenceOf(Constant(copy(body = body.removePrefix("const "))))
 
         else -> {
             val pi = body.indexOf(":")
             val mi = body.indexOf("(")
             if (mi == -1 || (pi < mi)) {
-                Property(this)
+                sequenceOf(Property(this))
             } else {
-                Method(this)
+                sequenceOf(Method(this))
             }
         }
     }
