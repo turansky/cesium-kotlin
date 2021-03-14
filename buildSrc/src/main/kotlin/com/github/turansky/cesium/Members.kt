@@ -1,6 +1,6 @@
 package com.github.turansky.cesium
 
-private val OPTIONS_REGEX = Regex("""options: (\{.+})""", RegexOption.DOT_MATCHES_ALL)
+private val OPTIONS_REGEX = Regex("""options\??: (\{.+})""", RegexOption.DOT_MATCHES_ALL)
 private val INNER_OPTIONS_REGEX = Regex("""(\w+\??): \{.+?}""", RegexOption.DOT_MATCHES_ALL)
 
 internal fun members(
