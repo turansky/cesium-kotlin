@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 private val OPTIONS_REGEX = Regex("""options: (\{.+})""", RegexOption.DOT_MATCHES_ALL)
-private val INNER_OPTIONS_REGEX = Regex(""": \{.+}""", RegexOption.DOT_MATCHES_ALL)
+private val INNER_OPTIONS_REGEX = Regex("""(\w+\??): \{.+?}""", RegexOption.DOT_MATCHES_ALL)
 
 internal fun members(
     body: String
@@ -65,8 +65,22 @@ private fun String.isPropertyLike(): Boolean {
 }
 
 private fun String.toOptionTypes(prefix: String): List<SimpleType> {
-    // TODO: support inner options
-    val body = replace(INNER_OPTIONS_REGEX, ": any")
-    val type = SimpleType(Definition("", "${prefix}Options = $body"))
-    return listOf(type)
+    val name = "${prefix}Options"
+
+    var body = this
+    val innerTypes = INNER_OPTIONS_REGEX.findAll(this)
+        .map {
+            val parameter = it.groupValues[1]
+            val typeName = name + parameter.removeSuffix("?").capitalize()
+            val typeBody = it.value
+                .removePrefix("$parameter: ")
+                .let { "$typeName = $it" }
+
+            body = body.replaceFirst(it.value, "$parameter: $typeName")
+
+            SimpleType(Definition("", typeBody))
+        }.toList()
+
+    val type = SimpleType(Definition("", "$name = $body"))
+    return listOf(type) + innerTypes
 }
