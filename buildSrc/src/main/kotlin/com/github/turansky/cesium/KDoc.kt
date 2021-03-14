@@ -123,16 +123,17 @@ private fun formatBlocks(source: String): String =
 private fun formatBlock(source: String): String =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n$it\n```" }
-        source.startsWith("@param ") -> formatParam(source)
-        source.startsWith("@property ") -> formatParam(source)
+        source.startsWith("@param ") -> formatParam(source, "@param ")
+        source.startsWith("@property ") -> formatParam(source, "@property ")
         source.startsWith("@returns") -> source.replace("@returns", "@return").multiline()
         else -> source
     }
 
-private fun formatParam(source: String): String {
-    val body = source
-        .removePrefix("@param ")
-        .removePrefix("@property ")
+private fun formatParam(
+    source: String,
+    prefix: String
+): String {
+    val body = source.removePrefix(prefix)
 
     val name: String
     val default: String?
@@ -157,7 +158,7 @@ private fun formatParam(source: String): String {
     val desc = description.removePrefix("- ")
         .multiline(*defaultLines)
 
-    return "@param [$name] $desc"
+    return "$prefix[$name] $desc"
 }
 
 private fun formatDefaultValue(source: String): String {
