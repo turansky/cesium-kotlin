@@ -69,6 +69,9 @@ private fun readDeclarations(
         .replace("($TS_FUNCTION)", JS_FUNCTION)
         .replace(TS_FUNCTION, JS_FUNCTION)
         .replace("* /**", "*")
+        .replace("PropertyBag | {\n            [key: string]: any;\n        }", "PropertyBag")
+        .replace("PropertyBag | {\n            [key: string]: TranslationRotationScale;\n        }", "PropertyBag")
+        .replace("PropertyBag | {\n            [key: string]: number;\n        }", "PropertyBag")
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .map { "/**$it" }
