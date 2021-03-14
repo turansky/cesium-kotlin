@@ -9,7 +9,7 @@ internal class TopType(
     override fun toCode(): String =
         DEFAULT_PACKAGE +
                 source.doc() +
-                "\n\n" +
+                "\n" +
                 typeDeclaration(source.body, true)
 
     companion object {

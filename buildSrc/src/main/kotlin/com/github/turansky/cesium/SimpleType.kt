@@ -13,6 +13,6 @@ internal class SimpleType(
 
     override fun toCode(): String =
         source.doc(DocLink(parent, this)) +
-                "\n\n" +
+                "\n" +
                 typeDeclaration(source.body, false)
 }
