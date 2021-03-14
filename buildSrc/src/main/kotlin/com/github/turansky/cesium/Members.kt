@@ -37,8 +37,11 @@ private fun Definition.toMembers(): Sequence<Member> =
             var constructorBody = body.removeSurrounding("constructor(", ")")
             val options = OPTIONS_REGEX.findAll(constructorBody)
                 .map { it.groupValues[1] }
-                .onEach { constructorBody = constructorBody.replace(it, "ConstructorOptions") }
-                .flatMap { it.toOptions("Constructor") }
+                .flatMap { source ->
+                    val types = source.toOptionTypes("Constructor")
+                    constructorBody = constructorBody.replaceFirst(source, types.first().name)
+                    types.asSequence()
+                }
                 .toList()
 
             val constructor = Constructor(copy(body = constructorBody))
@@ -61,9 +64,9 @@ private fun String.isPropertyLike(): Boolean {
     return mi == -1 || pi < mi
 }
 
-private fun String.toOptions(prefix: String): Sequence<SimpleType> {
+private fun String.toOptionTypes(prefix: String): List<SimpleType> {
     // TODO: support inner options
     val body = replace(INNER_OPTIONS_REGEX, ": any")
     val type = SimpleType(Definition("", "${prefix}Options = $body"))
-    return sequenceOf(type)
+    return listOf(type)
 }
