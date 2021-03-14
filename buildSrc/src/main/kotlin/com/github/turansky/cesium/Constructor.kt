@@ -14,13 +14,13 @@ internal class Constructor(
         .map(::Parameter)
         .toList()
 
-    val hiddenOptions: Boolean by lazy {
+    val supportHiddenOptions: Boolean by lazy {
         val p = parameters.singleOrNull()
         p != null && p.name == "options" && p.optional
     }
 
     override fun toCode(): String {
-        if (!hiddenOptions) {
+        if (!supportHiddenOptions) {
             val params = parameters.toCode()
             if (params.isNotEmpty()) {
                 return "constructor$params"

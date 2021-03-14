@@ -97,7 +97,7 @@ private fun Member.isNestedType(): Boolean =
     this is SimpleType || this is NestedNamespace
 
 private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
-    if (this == null || !hiddenOptions)
+    if (this == null || !supportHiddenOptions)
         return { true }
 
     return {
