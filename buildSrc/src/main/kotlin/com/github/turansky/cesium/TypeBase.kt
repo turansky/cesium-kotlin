@@ -43,7 +43,6 @@ internal abstract class TypeBase(
 
         val nestedTypes = companion?.members
             ?.filter { it.isNestedType() }
-            ?.filter(constructor.toMemberFilter())
             ?: emptyList()
 
         var body = members
@@ -51,6 +50,7 @@ internal abstract class TypeBase(
             .filter { it != constructor }
             .filter { staticBody || !it.static }
             .plus(nestedTypes)
+            .filter(constructor.toMemberFilter())
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
