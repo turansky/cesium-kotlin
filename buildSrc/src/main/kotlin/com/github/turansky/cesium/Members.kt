@@ -37,7 +37,7 @@ private fun Definition.toMembers(): Sequence<Member> =
             val optionTypes = OPTIONS_REGEX.findAll(constructorBody)
                 .map { it.groupValues[1] }
                 .flatMap { source ->
-                    val types = source.toOptionTypes("Constructor")
+                    val types = source.toOptionTypes("Constructor", false)
                     constructorBody = constructorBody.replaceFirst(source, types.first().name)
                     types.asSequence()
                 }
@@ -53,8 +53,30 @@ private fun Definition.toMembers(): Sequence<Member> =
         body.isPropertyLike()
         -> sequenceOf(Property(this))
 
-        else
-        -> sequenceOf(Method(this))
+        else -> {
+            var methodBody = body
+
+            val prefix = methodBody
+                .substringBefore("(")
+                .substringAfterLast(" ")
+                .capitalize()
+            val static = methodBody.startsWith("static ")
+
+            val parameters = methodBody
+                .substringAfter("(")
+                .substringBeforeLast(")")
+
+            val optionTypes = OPTIONS_REGEX.findAll(parameters)
+                .map { it.groupValues[1] }
+                .flatMap { source ->
+                    val types = source.toOptionTypes(prefix, static)
+                    methodBody = methodBody.replaceFirst(source, types.first().name)
+                    types.asSequence()
+                }
+                .toList()
+
+            sequenceOf(Method(copy(body = methodBody))) + optionTypes
+        }
     }
 
 private fun String.isPropertyLike(): Boolean {
@@ -63,7 +85,10 @@ private fun String.isPropertyLike(): Boolean {
     return mi == -1 || pi < mi
 }
 
-private fun String.toOptionTypes(prefix: String): List<SimpleType> {
+private fun String.toOptionTypes(
+    prefix: String,
+    static: Boolean
+): List<SimpleType> {
     val name = "${prefix}Options"
 
     var body = this
@@ -77,9 +102,9 @@ private fun String.toOptionTypes(prefix: String): List<SimpleType> {
 
             body = body.replaceFirst(it.value, "$parameter: $typeName")
 
-            SimpleType(Definition("", typeBody))
+            SimpleType(Definition("", typeBody), static)
         }.toList()
 
-    val type = SimpleType(Definition("", "$name = $body"))
+    val type = SimpleType(Definition("", "$name = $body"), static)
     return listOf(type) + innerTypes
 }

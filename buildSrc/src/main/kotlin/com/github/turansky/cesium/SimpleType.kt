@@ -1,15 +1,14 @@
 package com.github.turansky.cesium
 
 internal class SimpleType(
-    override val source: Definition
+    override val source: Definition,
+    override val static: Boolean = false
 ) : Member() {
     override val name: String =
         source.defaultName
 
     override val docName: String =
         ".$name"
-
-    override val static: Boolean = false
 
     val parameterNames: List<String> by lazy {
         source.body
