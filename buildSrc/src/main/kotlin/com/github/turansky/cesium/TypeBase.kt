@@ -95,8 +95,16 @@ internal abstract class TypeBase(
     }
 }
 
-private fun Member.isNestedType(): Boolean =
-    this is SimpleType || this is NestedNamespace
+private fun Member.isNestedType(): Boolean {
+    if (this is NestedNamespace)
+        return true
+
+    if (this !is SimpleType)
+        return false
+
+    return name.startsWith("ConstructorOptions")
+            || !name.endsWith("Options")
+}
 
 private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
     if (this == null || !hiddenOptions)
