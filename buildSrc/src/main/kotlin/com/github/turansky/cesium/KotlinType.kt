@@ -59,7 +59,9 @@ private val STANDARD_TYPE_MAP = mapOf(
 
     "Resource | string" to "Resource",
     "string | Resource" to "Resource",
-    "Credit | string" to "Credit"
+    "Credit | string" to "Credit",
+
+    "string | string[]" to "Array<out String>"
 )
 
 internal fun kotlinType(
