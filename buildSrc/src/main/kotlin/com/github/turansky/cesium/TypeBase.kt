@@ -50,6 +50,8 @@ internal abstract class TypeBase(
             .filter { it != constructor }
             .filter { staticBody || !it.static }
             .plus(nestedTypes)
+            // WA for duplicated option types
+            .distinct()
             .filter(constructor.toMemberFilter())
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP

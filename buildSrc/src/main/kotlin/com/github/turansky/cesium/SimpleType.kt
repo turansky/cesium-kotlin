@@ -28,4 +28,10 @@ internal class SimpleType(
         source.doc(DocLink(parent, this)) +
                 "\n" +
                 typeDeclaration(source.body, false)
+
+    override fun equals(other: Any?): Boolean =
+        other is SimpleType && source == other.source
+
+    override fun hashCode(): Int =
+        source.hashCode()
 }
