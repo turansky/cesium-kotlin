@@ -11,7 +11,8 @@ private const val CALL_DELIMITER = "."
 private val WHITE_LIST = setOf(
     "binarySearchComparator",
     "mergeSortComparator",
-    "requestAnimationFrameCallback"
+    "requestAnimationFrameCallback",
+    "createElevationBandMaterialEntry"
 )
 
 private val STANDARD_TYPE_MAP = mapOf(
@@ -54,7 +55,11 @@ private val STANDARD_TYPE_MAP = mapOf(
     "undefined | Promise<void>" to "$PROMISE<Nothing?>?",
     "Cartesian2 | Cartesian3" to "Cartesian3",
 
-    "Entity | Entity.ConstructorOptions" to "Entity"
+    "Entity | Entity.ConstructorOptions" to "Entity",
+
+    "Resource | string" to "Resource",
+    "string | Resource" to "Resource",
+    "Credit | string" to "Credit"
 )
 
 internal fun kotlinType(
