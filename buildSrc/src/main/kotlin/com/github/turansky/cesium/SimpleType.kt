@@ -18,6 +18,7 @@ internal class SimpleType(
             .trimIndent()
             .splitToSequence("\n")
             .filter { !it.startsWith(" ") }
+            .filter { !it.startsWith("}") }
             .map { it.substringBefore(": ") }
             .map { it.removeSuffix("?") }
             .toList()
