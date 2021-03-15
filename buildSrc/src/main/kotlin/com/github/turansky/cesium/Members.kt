@@ -32,10 +32,9 @@ private fun Definition.toMembers(): Sequence<Member> =
         body.startsWith("type ")
         -> sequenceOf(SimpleType(copy(body = body.removePrefix("type "))))
 
-        body.startsWith("constructor(")
-        -> {
+        body.startsWith("constructor(") -> {
             var constructorBody = body.removeSurrounding("constructor(", ")")
-            val options = OPTIONS_REGEX.findAll(constructorBody)
+            val optionTypes = OPTIONS_REGEX.findAll(constructorBody)
                 .map { it.groupValues[1] }
                 .flatMap { source ->
                     val types = source.toOptionTypes("Constructor")
@@ -45,7 +44,7 @@ private fun Definition.toMembers(): Sequence<Member> =
                 .toList()
 
             val constructor = Constructor(copy(body = constructorBody))
-            sequenceOf(constructor) + options
+            sequenceOf(constructor) + optionTypes
         }
 
         body.startsWith("const ")
