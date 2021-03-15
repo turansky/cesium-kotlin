@@ -11,6 +11,18 @@ internal class SimpleType(
 
     override val static: Boolean = false
 
+    val parameterNames: List<String> by lazy {
+        source.body
+            .substringAfter("\n")
+            .substringBeforeLast("\n")
+            .trimIndent()
+            .splitToSequence("\n")
+            .filter { !it.startsWith(" ") }
+            .map { it.substringBefore(": ") }
+            .map { it.removeSuffix("?") }
+            .toList()
+    }
+
     override fun toCode(): String =
         source.doc(DocLink(parent, this)) +
                 "\n" +

@@ -15,8 +15,7 @@ internal class Constructor(
         .toList()
 
     val hiddenOptions: Boolean by lazy {
-        val p = parameters.singleOrNull()
-        p != null && p.name == "options" && p.optional
+        hasHiddenOptions()
     }
 
     override fun toCode(): String {
@@ -28,5 +27,35 @@ internal class Constructor(
         }
 
         return ""
+    }
+
+    private companion object {
+        fun Constructor.hasHiddenOptions(): Boolean {
+            val p = parameters.singleOrNull()
+                ?: return false
+
+            if (p.name != "options" || !p.optional)
+                return false
+
+            val klass = parent as Class
+
+            val options = sequenceOf(klass, klass.companion)
+                .filterNotNull()
+                .flatMap { it.members.asSequence() }
+                .filterIsInstance<SimpleType>()
+                .filter { it.name == "ConstructorOptions" }
+                .singleOrNull()
+                ?: return false
+
+            val mutablePropertyNames = klass.members
+                .asSequence()
+                .filterIsInstance<Property>()
+                .filterNot { it.readOnly }
+                .map { it.name }
+                .toSet()
+
+            return options.parameterNames
+                .all { it in mutablePropertyNames }
+        }
     }
 }

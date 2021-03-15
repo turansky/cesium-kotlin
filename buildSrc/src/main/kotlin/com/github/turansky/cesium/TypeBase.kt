@@ -101,6 +101,6 @@ private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
         return { true }
 
     return {
-        it !is SimpleType || it.name != "ConstructorOptions"
+        it !is SimpleType || !it.name.startsWith("ConstructorOptions")
     }
 }
