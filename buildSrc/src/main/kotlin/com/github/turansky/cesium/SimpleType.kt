@@ -24,8 +24,8 @@ internal class SimpleType(
     }
 
     override fun toCode(): String =
-        source.doc(DocLink(parent, this)) +
-                "\n" +
+        source.doc(DocLink(parent, this))
+            .let { if (it.isNotEmpty()) "$it\n" else "" } +
                 typeDeclaration(source.body, false)
 
     override fun equals(other: Any?): Boolean =
