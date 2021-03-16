@@ -4,21 +4,16 @@ internal class Function(
     override val source: Definition
 ) : Declaration(), ITop {
     override val name = source.parseFunctionName()
-    private val parameters = source.parseFunctionParameters()
-    private val returnType = source.parseFunctionReturnType()
 
     override fun toCode(): String {
-        val returnExpression = returnType?.let { ": $it" } ?: ""
-        val declaration = "external fun $name ${parameters.toCode()}$returnExpression"
+        val code = source.toMethodMembers()
+            .map { it.toCode() }
+            .joinToString("\n\n")
 
-        val doc = source.doc(DocLink(this))
-        return if (doc.isNotEmpty()) {
-            DEFAULT_PACKAGE +
-                    doc +
-                    "\n" +
-                    declaration
+        return if (code.startsWith("/")) {
+            DEFAULT_PACKAGE + code
         } else {
-            declaration
+            code
         }
     }
 

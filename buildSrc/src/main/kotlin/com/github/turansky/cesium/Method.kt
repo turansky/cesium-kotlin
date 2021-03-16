@@ -24,9 +24,17 @@ internal class Method(
 
         val returnExpression = returnType?.let { ": $it" } ?: ""
 
-        val doc = source.doc()
+        val modifier = if (hasParent) "" else "external "
+        val link = if (hasParent) {
+            null // DocLink(parent, this)
+        } else {
+            DocLink(this)
+        }
+
+        val doc = source.doc(link)
             .let { if (it.isNotEmpty()) "$it\n" else "" }
 
-        return "$doc fun $name ${parameters.toCode()}$returnExpression"
+        return doc +
+                "$modifier fun $name ${parameters.toCode()}$returnExpression"
     }
 }
