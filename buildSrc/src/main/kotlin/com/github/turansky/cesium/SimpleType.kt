@@ -23,10 +23,18 @@ internal class SimpleType(
             .toList()
     }
 
-    override fun toCode(): String =
-        source.doc(DocLink(parent, this))
+    override fun toCode(): String {
+        val modifier = if (hasParent) "" else "external "
+        val link = if (hasParent) {
+            DocLink(parent, this)
+        } else {
+            DocLink(this)
+        }
+
+        return source.doc(link)
             .let { if (it.isNotEmpty()) "$it\n" else "" } +
-                typeDeclaration(source.body, false)
+                modifier + typeDeclaration(source.body, false)
+    }
 
     override fun equals(other: Any?): Boolean =
         other is SimpleType && source == other.source

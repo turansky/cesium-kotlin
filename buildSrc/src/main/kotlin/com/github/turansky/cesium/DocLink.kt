@@ -13,7 +13,7 @@ private constructor(
     constructor(enum: IEnum)
             : this(GLOBAL_TEMPLATE.replace("{enum}", enum.name))
 
-    constructor(top: ITop)
+    constructor(top: HasName)
             : this(TOP_TEMPLATE.replace("{top}", top.name), top is IType)
 
     constructor(type: IType, member: IMember)
