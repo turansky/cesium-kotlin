@@ -28,11 +28,10 @@ internal class Constructor(
 
     private companion object {
         fun Constructor.hasHiddenOptions(): Boolean {
-            val p = parameters.singleOrNull()
+            parameters.lastOrNull()
+                ?.takeIf { it.name == "options" }
+                ?.takeIf { it.optional }
                 ?: return false
-
-            if (p.name != "options" || !p.optional)
-                return false
 
             val klass = parent as Class
 
