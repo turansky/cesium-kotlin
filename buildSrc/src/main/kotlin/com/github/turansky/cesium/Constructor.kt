@@ -18,16 +18,13 @@ internal class Constructor(
         hasHiddenOptions()
     }
 
-    override fun toCode(): String {
-        if (!hiddenOptions) {
-            val params = parameters.toCode()
-            if (params.isNotEmpty()) {
-                return "constructor$params"
-            }
-        }
-
-        return ""
-    }
+    override fun toCode(): String =
+        parameters
+            .dropLast(if (hiddenOptions) 1 else 0)
+            .toCode()
+            .takeIf { it.isNotEmpty() }
+            ?.let { "constructor$it" }
+            ?: ""
 
     private companion object {
         fun Constructor.hasHiddenOptions(): Boolean {
