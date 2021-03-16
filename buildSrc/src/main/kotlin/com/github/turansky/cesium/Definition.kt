@@ -34,6 +34,10 @@ internal data class Definition(
     private val doc: String,
     val body: String
 ) {
+    val abstract: Boolean
+        get() = "* The interface for " in doc ||
+                "be instantiated directly." in doc
+
     val defaultName: String
         get() = body.substringBefore(" ")
 

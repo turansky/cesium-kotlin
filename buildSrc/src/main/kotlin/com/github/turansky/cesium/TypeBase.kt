@@ -87,11 +87,13 @@ internal abstract class TypeBase(
                     DEFAULT_PACKAGE
         } else ""
 
-        val modifier = if (top) "external" else ""
+        val modifiers = (if (top) "external " else "") +
+                (if (source.abstract) "abstract " else "")
+
         return header +
                 source.doc(DocLink(this)) +
                 "\n" +
-                "$modifier $typeName $name $body"
+                "$modifiers $typeName $name $body"
     }
 }
 
