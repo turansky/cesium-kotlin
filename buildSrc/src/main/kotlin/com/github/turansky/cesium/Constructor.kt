@@ -29,17 +29,21 @@ internal class Constructor(
             ?: ""
 
     fun toExtensionCode(): String {
-        if (!hiddenOptions || parameters.size > 1)
-            return ""
+        if (hiddenOptions) {
+            if (parameters.size != 1)
+                return ""
 
-        val type = parent.name
-        // language=Kotlin
-        return """
-            inline fun $type(
-                block: $type.() -> Unit
-            ): $type =
-                $type().apply(block)
-        """.trimIndent()
+            val type = parent.name
+            // language=Kotlin
+            return """
+                inline fun $type(
+                    block: $type.() -> Unit
+                ): $type =
+                    $type().apply(block)
+            """.trimIndent()
+        }
+
+        return ""
     }
 
     private companion object {
