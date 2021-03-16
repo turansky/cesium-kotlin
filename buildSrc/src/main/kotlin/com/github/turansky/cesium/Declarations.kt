@@ -38,6 +38,10 @@ internal fun parseDeclarations(
     addParentType(classMap, TILING_SCHEME)
     addParentType(classMap, VISUALIZER)
 
+    addParentType(classMap, "TileDiscardPolicy") {
+        "Discard" in it && "Policy" in it
+    }
+
     // TODO: remove temp hack
     declarations.removeAll {
         it.name == "DictionaryLike"
