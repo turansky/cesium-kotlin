@@ -9,5 +9,7 @@ internal class NestedNamespace(
     override val static: Boolean = true
 
     override fun toCode(): String =
-        Namespace(source).toCode(false)
+        Namespace(source)
+            .also { it.parentName = parent.name }
+            .toCode(false)
 }

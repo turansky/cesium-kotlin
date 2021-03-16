@@ -11,11 +11,11 @@ private constructor(
     val typeMode: Boolean = false
 ) {
     constructor(enum: IEnum)
-            : this(GLOBAL_TEMPLATE.replace("{enum}", enum.name))
+            : this(GLOBAL_TEMPLATE.replace("{enum}", enum.docName))
 
     constructor(top: HasName)
-            : this(TOP_TEMPLATE.replace("{top}", top.name), top is IType)
+            : this(TOP_TEMPLATE.replace("{top}", top.docName), top is IType)
 
     constructor(type: IType, member: IMember)
-            : this(MEMBER_TEMPLATE.replace("{type}", type.name).replace("{member}", member.docName))
+            : this(MEMBER_TEMPLATE.replace("{type}", type.docName).replace("{member}", member.docName))
 }
