@@ -25,6 +25,16 @@ internal fun parseDeclarations(
         .filterIsInstance<Class>()
         .associateBy { it.name }
 
+    addParentType(classMap, "TilingScheme") {
+        it.endsWith("TilingScheme")
+    }
+
+    /*
+    addParentType(classMap, "TerrainProvider") {
+        it.endsWith("TerrainProvider")
+    }
+    */
+
     // TODO: remove temp hack
     declarations.removeAll {
         it.name == "DictionaryLike"
@@ -58,6 +68,31 @@ internal fun parseDeclarations(
 
     return declarations
 }
+
+private fun addParentType(
+    classMap: Map<String, Class>,
+    parentType: String,
+    filter: (String) -> Boolean
+) {
+    val abstractMembers = classMap.getValue(parentType)
+        .overridableMembers()
+        .map { it.name }
+        .toSet()
+
+    classMap.keys
+        .asSequence()
+        .filter { filter(it) && it != parentType }
+        .map(classMap::getValue)
+        .onEach { it.parents += parentType }
+        .flatMap { it.overridableMembers() }
+        .filter { it.name in abstractMembers }
+        .forEach { it.overridden = true }
+}
+
+private fun Class.overridableMembers(): Sequence<Member> =
+    members.asSequence()
+        .filter { !it.static }
+        .filter { it is Property || it is Method }
 
 private fun readDeclarations(
     definitionsFile: File

@@ -25,7 +25,8 @@ internal class Method(
         val returnExpression = returnType?.let { ": $it" } ?: ""
 
         val modifiers = (if (hasParent) "" else "external ") +
-                (if (abstract) "abstract " else "")
+                (if (abstract) "abstract " else "") +
+                (if (overridden) "override " else "")
 
         val link = if (hasParent) {
             DocLink(parent, this)
@@ -36,7 +37,12 @@ internal class Method(
         val doc = source.doc(link)
             .let { if (it.isNotEmpty()) "$it\n" else "" }
 
+        var params = parameters.toCode()
+        if (overridden) {
+            params = params.replace(" = definedExternally", "")
+        }
+
         return doc +
-                "$modifiers fun $name ${parameters.toCode()}$returnExpression"
+                "$modifiers fun $name $params$returnExpression"
     }
 }

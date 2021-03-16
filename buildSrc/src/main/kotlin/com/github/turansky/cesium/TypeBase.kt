@@ -15,7 +15,9 @@ internal abstract class TypeBase(
     abstract val companion: HasMembers?
     open val staticBody: Boolean = false
 
-    private val abstract = source.abstract
+    private val abstract: Boolean by lazy {
+        source.abstract || name == "TilingScheme"
+    }
 
     override val members by lazy {
         members(source.body)
@@ -89,8 +91,12 @@ internal abstract class TypeBase(
             }
         }
 
+        val parentNames = if (parents.isNotEmpty()) {
+            " : " + parents.joinToString(", ")
+        } else ""
+
         // TODO: move cleanup to separate method
-        body = "$constructorBody {\n$body\n}\n"
+        body = "$constructorBody $parentNames {\n$body\n}\n"
             .replace(": $name.", ": ")
 
         val header = if (top) {

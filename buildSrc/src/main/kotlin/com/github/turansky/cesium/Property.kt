@@ -16,6 +16,7 @@ internal class Property(
     override fun toCode(): String {
         return source.doc(DocLink(parent, this)) + "\n" +
                 (if (abstract) "abstract " else "") +
+                (if (overridden) "override " else "") +
                 (if (readOnly) "val" else "var") +
                 " $name: $type"
     }
