@@ -25,9 +25,8 @@ internal fun parseDeclarations(
         .filterIsInstance<Class>()
         .associateBy { it.name }
 
-    addParentType(classMap, "TilingScheme") {
-        it.endsWith("TilingScheme")
-    }
+    addParentType(classMap, "TilingScheme")
+    addParentType(classMap, "Light")
 
     /*
     addParentType(classMap, "TerrainProvider") {
@@ -72,7 +71,7 @@ internal fun parseDeclarations(
 private fun addParentType(
     classMap: Map<String, Class>,
     parentType: String,
-    filter: (String) -> Boolean
+    filter: (String) -> Boolean = { it.endsWith(parentType) }
 ) {
     val abstractMembers = classMap.getValue(parentType)
         .overridableMembers()
