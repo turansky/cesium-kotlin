@@ -8,7 +8,7 @@ internal class Parameter(
         .removeSuffix("?")
         .let { if (it == "object") "obj" else it }
 
-    private val type: String by lazy {
+    val type: String by lazy {
         kotlinType(body.substringAfter(": "), name)
     }
 

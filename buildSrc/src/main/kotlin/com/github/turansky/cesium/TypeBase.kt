@@ -29,7 +29,7 @@ internal abstract class TypeBase(
                 add(TOPLEVEL_TYPEALIASES_ONLY)
 
             val constructor = members.firstOrNull() as? Constructor
-            if (constructor != null && constructor.hiddenOptions)
+            if (constructor != null && constructor.hasOptions)
                 add(NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE)
         }
     }

@@ -16,6 +16,11 @@ internal class Constructor(
         .map(::Parameter)
         .toList()
 
+    val hasOptions: Boolean by lazy {
+        val p = parameters.lastOrNull()
+        p != null && p.name == "options" && p.type.endsWith(CONSTRUCTOR_OPTIONS)
+    }
+
     val hiddenOptions: Boolean by lazy {
         hasHiddenOptions()
     }
@@ -29,11 +34,12 @@ internal class Constructor(
             ?: ""
 
     fun toExtensionCode(): String {
+        val type = parent.name
+
         if (hiddenOptions) {
             if (parameters.size != 1)
                 return ""
 
-            val type = parent.name
             // language=Kotlin
             return """
                 inline fun $type(
@@ -43,7 +49,23 @@ internal class Constructor(
             """.trimIndent()
         }
 
-        return ""
+        if (!hasOptions) return ""
+
+        val optionsType = "$type.$CONSTRUCTOR_OPTIONS"
+        val params = parameters.dropLast(1)
+            .joinToString("") { it.toCode() + ",\n" }
+        val args = parameters.joinToString(", ") { it.name }
+
+        // language=Kotlin
+        return """
+            inline fun $type(
+                $params block: $optionsType.() -> Unit
+            ): $type {
+                val options: $optionsType = js("({})")
+                block(options) 
+                return $type($args)
+            }
+        """.trimIndent()
     }
 
     private companion object {
