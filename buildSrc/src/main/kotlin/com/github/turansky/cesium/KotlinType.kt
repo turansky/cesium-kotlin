@@ -79,6 +79,9 @@ internal fun kotlinType(
         return if (isInteger(name)) "Int" else "Double"
     }
 
+    if (type == JS_FUNCTION && name == "listener")
+        return "() -> Unit"
+
     if (STANDARD_TYPE_MAP.containsKey(type))
         return STANDARD_TYPE_MAP.getValue(type)
 
