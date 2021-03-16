@@ -9,13 +9,18 @@ internal abstract class TypeBase(
     override val name: String =
         source.defaultName
 
+    var parents: List<String> = emptyList()
+
     abstract val typeName: String
     abstract val companion: HasMembers?
     open val staticBody: Boolean = false
 
+    private val abstract = source.abstract
+
     override val members by lazy {
         members(source.body)
             .onEach { it.parent = this }
+            .onEach { if (!it.static) it.abstract = abstract }
     }
 
     open fun suppresses(): List<Suppress> {
@@ -94,7 +99,7 @@ internal abstract class TypeBase(
         } else ""
 
         val modifiers = (if (top) "external " else "") +
-                (if (source.abstract) "abstract " else "")
+                (if (abstract) "abstract " else "")
 
         return header +
                 source.doc(DocLink(this)) +
