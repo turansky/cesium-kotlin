@@ -39,7 +39,11 @@ internal fun parseDeclarations(
     addParentType(classMap, VISUALIZER)
 
     addParentType(classMap, "TileDiscardPolicy") {
-        "Discard" in it && "Policy" in it
+        "Tile" in it && "Discard" in it && "Policy" in it
+    }
+
+    addParentType(classMap, "StyleExpression") {
+        it.endsWith("Expression")
     }
 
     // TODO: remove temp hack
