@@ -26,7 +26,7 @@ internal class Method(
 
         val modifier = if (hasParent) "" else "external "
         val link = if (hasParent) {
-            null // DocLink(parent, this)
+            DocLink(parent, this)
         } else {
             DocLink(this)
         }
