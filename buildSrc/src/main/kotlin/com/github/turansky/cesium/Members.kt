@@ -53,31 +53,33 @@ private fun Definition.toMembers(): Sequence<Member> =
         body.isPropertyLike()
         -> sequenceOf(Property(this))
 
-        else -> {
-            var methodBody = body
-
-            val prefix = methodBody
-                .substringBefore("(")
-                .substringAfterLast(" ")
-                .capitalize()
-            val static = methodBody.startsWith("static ")
-
-            val parameters = methodBody
-                .substringAfter("(")
-                .substringBeforeLast(")")
-
-            val optionTypes = OPTIONS_REGEX.findAll(parameters)
-                .map { it.groupValues[1] }
-                .flatMap { source ->
-                    val types = source.toOptionTypes(prefix, static)
-                    methodBody = methodBody.replaceFirst(source, types.first().name)
-                    types.asSequence()
-                }
-                .toList()
-
-            sequenceOf(Method(copy(body = methodBody))) + optionTypes
-        }
+        else -> toMethodMembers()
     }
+
+internal fun Definition.toMethodMembers(): Sequence<Member> {
+    var methodBody = body
+
+    val prefix = methodBody
+        .substringBefore("(")
+        .substringAfterLast(" ")
+        .capitalize()
+    val static = methodBody.startsWith("static ")
+
+    val parameters = methodBody
+        .substringAfter("(")
+        .substringBeforeLast(")")
+
+    val optionTypes = OPTIONS_REGEX.findAll(parameters)
+        .map { it.groupValues[1] }
+        .flatMap { source ->
+            val types = source.toOptionTypes(prefix, static)
+            methodBody = methodBody.replaceFirst(source, types.first().name)
+            types.asSequence()
+        }
+        .toList()
+
+    return sequenceOf(Method(copy(body = methodBody))) + optionTypes
+}
 
 private fun String.isPropertyLike(): Boolean {
     val pi = indexOf(":")
