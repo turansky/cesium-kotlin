@@ -1,7 +1,6 @@
 package com.github.turansky.cesium
 
-import com.github.turansky.cesium.Suppress.NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE
-import com.github.turansky.cesium.Suppress.TOPLEVEL_TYPEALIASES_ONLY
+import com.github.turansky.cesium.Suppress.*
 
 internal abstract class TypeBase(
     final override val source: Definition
@@ -34,6 +33,11 @@ internal abstract class TypeBase(
         return mutableListOf<Suppress>().apply {
             if (hasAliases)
                 add(TOPLEVEL_TYPEALIASES_ONLY)
+
+            if (parents.isNotEmpty() && name.endsWith(TERRAIN_PROVIDER)) {
+                add(VAR_OVERRIDDEN_BY_VAL)
+                add(VAR_TYPE_MISMATCH_ON_OVERRIDE)
+            }
 
             val constructor = members.firstOrNull() as? Constructor
             if (constructor != null && constructor.hasOptions)

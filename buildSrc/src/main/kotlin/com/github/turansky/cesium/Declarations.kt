@@ -4,6 +4,11 @@ import java.io.File
 
 private const val TS_FUNCTION = "(...params: any[]) => any"
 
+internal const val LIGHT: String = "Light"
+internal const val SPLINE: String = "Spline"
+internal const val TERRAIN_PROVIDER: String = "TerrainProvider"
+internal const val TILING_SCHEME: String = "TilingScheme"
+
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
     Enum.PREFIX to ::Enum,
@@ -25,14 +30,9 @@ internal fun parseDeclarations(
         .filterIsInstance<Class>()
         .associateBy { it.name }
 
-    addParentType(classMap, "TilingScheme")
-    addParentType(classMap, "Light")
-
-    /*
-    addParentType(classMap, "TerrainProvider") {
-        it.endsWith("TerrainProvider")
-    }
-    */
+    addParentType(classMap, LIGHT)
+    addParentType(classMap, TERRAIN_PROVIDER)
+    addParentType(classMap, TILING_SCHEME)
 
     // TODO: remove temp hack
     declarations.removeAll {
