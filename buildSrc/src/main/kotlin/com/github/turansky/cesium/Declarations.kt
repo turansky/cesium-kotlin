@@ -9,6 +9,7 @@ internal const val SPLINE: String = "Spline"
 internal const val TERRAIN_DATA: String = "TerrainData"
 internal const val TERRAIN_PROVIDER: String = "TerrainProvider"
 internal const val TILING_SCHEME: String = "TilingScheme"
+internal const val VISUALIZER: String = "Visualizer"
 
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
@@ -35,6 +36,7 @@ internal fun parseDeclarations(
     addParentType(classMap, TERRAIN_DATA)
     addParentType(classMap, TERRAIN_PROVIDER)
     addParentType(classMap, TILING_SCHEME)
+    addParentType(classMap, VISUALIZER)
 
     // TODO: remove temp hack
     declarations.removeAll {
