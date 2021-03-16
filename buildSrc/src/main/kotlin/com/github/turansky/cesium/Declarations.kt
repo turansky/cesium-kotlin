@@ -6,6 +6,7 @@ private const val TS_FUNCTION = "(...params: any[]) => any"
 
 internal const val LIGHT: String = "Light"
 internal const val SPLINE: String = "Spline"
+internal const val TERRAIN_DATA: String = "TerrainData"
 internal const val TERRAIN_PROVIDER: String = "TerrainProvider"
 internal const val TILING_SCHEME: String = "TilingScheme"
 
@@ -31,6 +32,7 @@ internal fun parseDeclarations(
         .associateBy { it.name }
 
     addParentType(classMap, LIGHT)
+    addParentType(classMap, TERRAIN_DATA)
     addParentType(classMap, TERRAIN_PROVIDER)
     addParentType(classMap, TILING_SCHEME)
 
