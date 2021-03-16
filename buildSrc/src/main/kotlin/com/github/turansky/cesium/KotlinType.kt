@@ -10,9 +10,13 @@ private const val CALL_DELIMITER = "."
 
 private val WHITE_LIST = setOf(
     "binarySearchComparator",
+    "createElevationBandMaterialBand",
+    "createElevationBandMaterialEntry",
+    "exportKmlModelCallback",
     "mergeSortComparator",
     "requestAnimationFrameCallback",
-    "createElevationBandMaterialEntry"
+
+    "GeoJsonDataSource.describe"
 )
 
 private val STANDARD_TYPE_MAP = mapOf(
