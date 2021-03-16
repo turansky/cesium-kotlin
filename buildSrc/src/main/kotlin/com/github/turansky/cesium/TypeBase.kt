@@ -104,7 +104,7 @@ private fun Member.isNestedType(): Boolean {
     if (this !is SimpleType)
         return false
 
-    return name.startsWith("ConstructorOptions")
+    return name.startsWith(CONSTRUCTOR_OPTIONS)
             || !name.endsWith("Options")
 }
 
@@ -113,6 +113,6 @@ private fun Constructor?.toMemberFilter(): (Member) -> Boolean {
         return { true }
 
     return {
-        it !is SimpleType || !it.name.startsWith("ConstructorOptions")
+        it !is SimpleType || !it.name.startsWith(CONSTRUCTOR_OPTIONS)
     }
 }

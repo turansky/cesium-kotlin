@@ -1,5 +1,7 @@
 package com.github.turansky.cesium
 
+internal const val CONSTRUCTOR_OPTIONS: String = "ConstructorOptions"
+
 internal class Constructor(
     override val source: Definition
 ) : Member() {
@@ -39,7 +41,7 @@ internal class Constructor(
                 .filterNotNull()
                 .flatMap { it.members.asSequence() }
                 .filterIsInstance<SimpleType>()
-                .filter { it.name == "ConstructorOptions" }
+                .filter { it.name == CONSTRUCTOR_OPTIONS }
                 .singleOrNull()
                 ?: return false
 
