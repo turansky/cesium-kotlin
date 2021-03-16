@@ -6,4 +6,7 @@ internal abstract class Member : Declaration(), IMember {
         get() = ::parent.isInitialized
 
     abstract val static: Boolean
+
+    var abstract: Boolean = false
+    var overridden: Boolean = false
 }
