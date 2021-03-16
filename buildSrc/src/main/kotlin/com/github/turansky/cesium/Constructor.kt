@@ -28,6 +28,20 @@ internal class Constructor(
             ?.let { "constructor$it" }
             ?: ""
 
+    fun toExtensionCode(): String {
+        if (!hiddenOptions || parameters.size > 1)
+            return ""
+
+        val type = parent.name
+        // language=Kotlin
+        return """
+            inline fun $type(
+                block: $type.() -> Unit
+            ): $type =
+                $type().apply(block)
+        """.trimIndent()
+    }
+
     private companion object {
         fun Constructor.hasHiddenOptions(): Boolean {
             parameters.lastOrNull()

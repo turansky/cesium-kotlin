@@ -1,5 +1,6 @@
 package com.github.turansky.cesium
 
+import com.github.turansky.cesium.Suppress.NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE
 import com.github.turansky.cesium.Suppress.TOPLEVEL_TYPEALIASES_ONLY
 
 internal abstract class TypeBase(
@@ -23,9 +24,14 @@ internal abstract class TypeBase(
             .flatMap { it.members.asSequence() }
             .any { it is SimpleType }
 
-        return if (hasAliases) {
-            listOf(TOPLEVEL_TYPEALIASES_ONLY)
-        } else emptyList()
+        return mutableListOf<Suppress>().apply {
+            if (hasAliases)
+                add(TOPLEVEL_TYPEALIASES_ONLY)
+
+            val constructor = members.firstOrNull() as? Constructor
+            if (constructor != null && constructor.hiddenOptions)
+                add(NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE)
+        }
     }
 
     override fun toCode(): String =
@@ -79,7 +85,7 @@ internal abstract class TypeBase(
         }
 
         // TODO: move cleanup to separate method
-        body = "$constructorBody {\n$body\n}"
+        body = "$constructorBody {\n$body\n}\n"
             .replace(": $name.", ": ")
 
         val header = if (top) {
@@ -93,7 +99,8 @@ internal abstract class TypeBase(
         return header +
                 source.doc(DocLink(this)) +
                 "\n" +
-                "$modifiers $typeName $name $body"
+                "$modifiers $typeName $name $body" +
+                (constructor?.toExtensionCode() ?: "")
     }
 }
 
