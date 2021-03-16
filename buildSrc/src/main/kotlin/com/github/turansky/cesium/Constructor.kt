@@ -51,6 +51,7 @@ internal class Constructor(
             parameters.lastOrNull()
                 ?.takeIf { it.name == "options" }
                 ?.takeIf { it.optional }
+                ?.takeIf { it.type.endsWith(CONSTRUCTOR_OPTIONS) }
                 ?: return false
 
             val klass = parent as Class
@@ -59,9 +60,7 @@ internal class Constructor(
                 .filterNotNull()
                 .flatMap { it.members.asSequence() }
                 .filterIsInstance<SimpleType>()
-                .filter { it.name == CONSTRUCTOR_OPTIONS }
-                .singleOrNull()
-                ?: return false
+                .single { it.name == CONSTRUCTOR_OPTIONS }
 
             val mutablePropertyNames = klass.members
                 .asSequence()
