@@ -22,7 +22,10 @@ internal class Method(
         if (name == "equals" && parameters.size == 1)
             return ""
 
-        val returnExpression = returnType?.let { ": $it" } ?: ""
+        val returnExpression = returnType
+            // Nullability fix for `SceneTransforms`
+            ?.let { if (name.startsWith("wgs84To")) "$it?" else it }
+            ?.let { ": $it" } ?: ""
 
         val modifiers = (if (hasParent) "" else "external ") +
                 (if (abstract) "abstract " else "") +
