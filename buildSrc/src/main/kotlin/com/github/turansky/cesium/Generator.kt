@@ -2,6 +2,8 @@ package com.github.turansky.cesium
 
 import java.io.File
 
+private const val LAZY_MODE: Boolean = false
+
 private const val GENERATOR_COMMENT = "Automatically generated - do not modify!"
 
 private const val MODULE_ANNOTATION: String = """@file:JsModule("cesium")"""
@@ -22,7 +24,11 @@ internal fun generateKotlinDeclarations(
             if (!file.exists()) {
                 val content = "// $GENERATOR_COMMENT\n\n" +
                         if ("\nexternal " in code) {
-                            MODULE_ANNOTATION + "\n\n" + code
+                            if (LAZY_MODE) {
+                                code.addLazyAnnotations()
+                            } else {
+                                MODULE_ANNOTATION + "\n\n" + code
+                            }
                         } else code
 
                 file.writeText(content)
@@ -32,3 +38,19 @@ internal fun generateKotlinDeclarations(
             }
         }
 }
+
+private val LAZY_REGEXP = Regex("""\n *external +(.+)\n""")
+
+private fun String.addLazyAnnotations(): String =
+    replace(LAZY_REGEXP) {
+        val value = it.value
+        val name = it.groupValues[1]
+            .substringBefore("{")
+            .substringBefore("(")
+            .substringBefore(":")
+            .trim()
+            .splitToSequence(" ")
+            .last()
+
+        "\n@JsName(\"\\${'$'}cesium__$name\")$value"
+    }
