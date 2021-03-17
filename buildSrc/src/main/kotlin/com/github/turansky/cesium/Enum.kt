@@ -20,10 +20,15 @@ internal class Enum(
                 it.toCode()
             }
 
+        val type = if (LAZY_MODE) {
+            "object /* enum */"
+        } else {
+            "enum class"
+        }
         return DEFAULT_PACKAGE +
                 source.doc(DocLink(this)) +
                 "\n\n" +
-                "external enum class $name {\n\n$body\n}"
+                "external $type $name {\n\n$body\n}"
     }
 
     companion object {
