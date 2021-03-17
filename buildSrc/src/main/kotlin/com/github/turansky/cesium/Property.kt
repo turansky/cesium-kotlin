@@ -11,7 +11,9 @@ internal class Property(
         get() = if (static) ".$name" else name
 
     private val modifiers = data.dropLast(1)
-    override val static = "static" in modifiers || (hasParent && parent is Namespace)
+    override val static: Boolean by lazy {
+        "static" in modifiers || (hasParent && parent is Namespace)
+    }
     val readOnly = "readonly" in modifiers
 
     val type = kotlinType(source.body.substringAfter(": "), name)
