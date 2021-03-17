@@ -77,9 +77,9 @@ internal abstract class TypeBase(
         val suppresses = suppresses()
         val suppressHeader = if (suppresses.isNotEmpty()) {
             suppresses.asSequence()
-                .map { """"${it.name}"""" }
-                .joinToString(", ")
-                .let { "@file:Suppress($it)\n\n" }
+                .map { """"${it.name}",""" }
+                .joinToString("\n")
+                .let { "@file:Suppress(\n$it\n)\n\n" }
         } else ""
 
         if (!staticBody) {
