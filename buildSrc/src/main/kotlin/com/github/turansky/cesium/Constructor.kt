@@ -34,6 +34,9 @@ internal class Constructor(
             ?: ""
 
     fun toExtensionCode(): String {
+        if (LAZY_MODE)
+            return ""
+
         val type = parent.name
 
         if (hiddenOptions) {

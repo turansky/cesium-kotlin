@@ -2,7 +2,7 @@ package com.github.turansky.cesium
 
 import java.io.File
 
-private const val LAZY_MODE: Boolean = false
+const val LAZY_MODE: Boolean = false
 
 private const val GENERATOR_COMMENT = "Automatically generated - do not modify!"
 
