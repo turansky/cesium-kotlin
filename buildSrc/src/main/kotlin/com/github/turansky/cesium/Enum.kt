@@ -7,7 +7,7 @@ internal class Enum(
         source.defaultName
 
     override fun toCode(): String {
-        val body = source.body
+        var body = source.body
             .substringAfter("\n    ")
             .removeSuffix("}")
             .replace(",\n     *", "__COMMA__\n     *")
@@ -15,10 +15,13 @@ internal class Enum(
             .asSequence()
             .map { it.replace("__COMMA__\n", ",\n") }
             .flatMap { parseTopDefinition(it) }
-            .map { EnumConstant(it) }
-            .joinToString(separator = "\n\n", postfix = "\n\n;\n") {
+            .map { EnumConstant(it, this) }
+            .joinToString("\n\n") {
                 it.toCode()
             }
+
+        if (!LAZY_MODE)
+            body += "\n\n;\n"
 
         val type = if (LAZY_MODE) {
             "object /* enum */"
@@ -38,17 +41,24 @@ internal class Enum(
 
 // TODO: describe value in comments
 internal class EnumConstant(
-    override val source: Definition
+    override val source: Definition,
+    private val parent: Enum
 ) : Declaration() {
     override val name: String =
         source.body.split(" = ")[0]
 
     override fun toCode(): String {
         val doc = source.doc()
-        return if (doc.isNotBlank()) {
-            "$doc\n${name},"
+        val body = if (LAZY_MODE) {
+            "val $name: ${parent.name}"
         } else {
             "$name,"
+        }
+
+        return if (doc.isNotBlank()) {
+            "$doc\n$body"
+        } else {
+            body
         }
     }
 }
