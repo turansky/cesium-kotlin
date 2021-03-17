@@ -4,13 +4,15 @@ internal class Method(
     override val source: Definition
 ) : Member() {
     override val name = source.parseFunctionName()
+    override val docName: String
+        get() = if (static) ".$name" else name
 
     private val modifiers = source.body
         .substringBefore("(")
         .split(" ")
         .dropLast(1)
 
-    override val static: Boolean = "static" in modifiers
+    override val static: Boolean = "static" in modifiers || (hasParent && parent is Namespace)
 
     private val parameters = source.parseFunctionParameters()
     private val returnType = source.parseFunctionReturnType()

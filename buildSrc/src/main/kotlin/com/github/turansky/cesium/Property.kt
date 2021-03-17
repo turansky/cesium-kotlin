@@ -7,8 +7,11 @@ internal class Property(
         .split(" ")
 
     override val name: String = data.last()
+    override val docName: String
+        get() = if (static) ".$name" else name
+
     private val modifiers = data.dropLast(1)
-    override val static = "static" in modifiers
+    override val static = "static" in modifiers || (hasParent && parent is Namespace)
     val readOnly = "readonly" in modifiers
 
     val type = kotlinType(source.body.substringAfter(": "), name)
