@@ -16,7 +16,7 @@ internal class Enum(
             .map { it.replace("__COMMA__\n", ",\n") }
             .flatMap { parseTopDefinition(it) }
             .map { EnumConstant(it) }
-            .joinToString(separator = ",\n\n", postfix = ",\n\n;\n") {
+            .joinToString(separator = "\n\n", postfix = "\n\n;\n") {
                 it.toCode()
             }
 
@@ -46,9 +46,9 @@ internal class EnumConstant(
     override fun toCode(): String {
         val doc = source.doc()
         return if (doc.isNotBlank()) {
-            "$doc\n${name}"
+            "$doc\n${name},"
         } else {
-            name
+            "$name,"
         }
     }
 }
