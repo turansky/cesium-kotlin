@@ -11,6 +11,10 @@ internal const val TERRAIN_PROVIDER: String = "TerrainProvider"
 internal const val TILING_SCHEME: String = "TilingScheme"
 internal const val VISUALIZER: String = "Visualizer"
 
+internal const val PROPERTY: String = "Property"
+internal const val MATERIAL_PROPERTY: String = "MaterialProperty"
+internal const val POSITION_PROPERTY: String = "PositionProperty"
+
 private val FACTORY_MAP = mapOf(
     Function.PREFIX to ::Function,
     Enum.PREFIX to ::Enum,
@@ -37,6 +41,20 @@ internal fun parseDeclarations(
     addParentType(classMap, TERRAIN_PROVIDER)
     addParentType(classMap, TILING_SCHEME)
     addParentType(classMap, VISUALIZER)
+
+    addParentType(classMap, MATERIAL_PROPERTY)
+    /*
+    addParentType(classMap, POSITION_PROPERTY)
+    addParentType(classMap, PROPERTY) {
+        when {
+            it == MATERIAL_PROPERTY -> true
+            it == POSITION_PROPERTY -> true
+            it.endsWith(MATERIAL_PROPERTY) -> false
+            it.endsWith(POSITION_PROPERTY) -> false
+            else -> it.endsWith(PROPERTY)
+        }
+    }
+    */
 
     addParentType(classMap, "TileDiscardPolicy") {
         "Tile" in it && "Discard" in it && "Policy" in it
