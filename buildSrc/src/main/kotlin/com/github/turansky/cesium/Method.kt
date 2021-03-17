@@ -12,7 +12,9 @@ internal class Method(
         .split(" ")
         .dropLast(1)
 
-    override val static: Boolean = "static" in modifiers || (hasParent && parent is Namespace)
+    override val static: Boolean by lazy {
+        "static" in modifiers || (hasParent && parent is Namespace)
+    }
 
     private val parameters = source.parseFunctionParameters()
     private val returnType = source.parseFunctionReturnType()
