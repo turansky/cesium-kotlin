@@ -2,7 +2,10 @@ package com.github.turansky.cesium
 
 import java.io.File
 
-const val LAZY_MODE: Boolean = false
+private var nonModularMode: Boolean = false
+
+val LAZY_MODE: Boolean
+    get() = nonModularMode
 
 private const val GENERATOR_COMMENT = "Automatically generated - do not modify!"
 
@@ -10,8 +13,11 @@ private const val MODULE_ANNOTATION: String = """@file:JsModule("cesium")"""
 
 internal fun generateKotlinDeclarations(
     definitionsFile: File,
-    sourceDir: File
+    sourceDir: File,
+    nonModular: Boolean
 ) {
+    nonModularMode = nonModular
+
     val cesiumDir = sourceDir.resolve("cesium")
         .also { it.mkdirs() }
 

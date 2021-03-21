@@ -21,7 +21,8 @@ tasks {
 
             generateKotlinDeclarations(
                 definitionsFile = definitionsFile,
-                sourceDir = sourceDir
+                sourceDir = sourceDir,
+                nonModular = project.name.endsWith("-nm")
             )
         }
     }
