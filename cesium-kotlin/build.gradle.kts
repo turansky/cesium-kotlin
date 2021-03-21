@@ -4,5 +4,5 @@ plugins {
 }
 
 dependencies {
-    implementation(npm("cesium", property("cesium.version") as String))
+    implementation(npmv("cesium"))
 }
