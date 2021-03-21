@@ -11,3 +11,4 @@ pluginManagement {
 }
 
 include("cesium-kotlin")
+include("cesium-kotlin-nm")

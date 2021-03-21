@@ -2,6 +2,7 @@
 build/
 
 cesium-kotlin/src/
+cesium-kotlin-nm/src/
 
 # IDEA ignore list
 .idea/*
