@@ -16,6 +16,13 @@ internal class Interface(
         return result
     }
 
+    override fun toCode(): String =
+        if (name == PACKABLE) {
+            applyPackableFixes(super.toCode())
+        } else {
+            super.toCode()
+        }
+
     companion object {
         const val PREFIX = "export interface "
     }

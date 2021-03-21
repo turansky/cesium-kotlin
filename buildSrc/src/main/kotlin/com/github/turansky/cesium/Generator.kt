@@ -54,6 +54,7 @@ private fun String.addLazyAnnotations(): String =
             .substringBefore("{")
             .substringBefore("(")
             .substringBefore(":")
+            .substringBefore("<")
             .trim()
             .splitToSequence(" ")
             .last()
