@@ -83,15 +83,29 @@ internal abstract class TypeBase(
         } else ""
 
         if (!staticBody) {
-            val companionBody = members
-                .asSequence()
-                .filter { it.static }
+            val staticMembers = members.filter { it.static }
                 .plus(companionMembers)
+
+            val packable = name != PACKABLE
+                    && name != "PlaneOutlineGeometry" // WA
+                    && staticMembers.any { it.name == PACKED_LENGTH }
+
+            if (packable) {
+                staticMembers.asSequence()
+                    .filter { it.name in PACKABLE_MEMBERS }
+                    .forEach { it.overridden = true }
+            }
+
+            val companionBody = staticMembers
                 .map { it.toCode() }
                 .joinToString(separator = "\n\n")
 
+            val companionTypes = if (packable) {
+                ": $PACKABLE<$name>"
+            } else ""
+
             if (companionBody.isNotEmpty()) {
-                body += "\n\ncompanion object {\n$companionBody\n}"
+                body += "\n\ncompanion object $companionTypes {\n$companionBody\n}"
             }
         }
 
