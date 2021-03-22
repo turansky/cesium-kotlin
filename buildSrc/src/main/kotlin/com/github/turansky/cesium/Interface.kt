@@ -10,7 +10,7 @@ internal class Interface(
 
     override fun suppresses(): List<Suppress> {
         var result = super.suppresses()
-        if (companion != null)
+        if (companion != null && name != PACKABLE)
             result = result + NESTED_CLASS_IN_EXTERNAL_INTERFACE
 
         return result
