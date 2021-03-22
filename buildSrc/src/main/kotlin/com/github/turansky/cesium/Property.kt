@@ -14,7 +14,7 @@ internal class Property(
     override val static: Boolean by lazy {
         "static" in modifiers || (hasParent && parent is Namespace)
     }
-    val readOnly = "readonly" in modifiers
+    val readOnly = "readonly" in modifiers || name == PACKED_LENGTH
 
     val type = kotlinType(source.body.substringAfter(": "), name)
 
