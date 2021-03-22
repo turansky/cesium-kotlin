@@ -84,6 +84,9 @@ internal fun kotlinType(
     if (type == JS_FUNCTION && name == "listener")
         return "() -> Unit"
 
+    if (type == "any" && name == "orientation")
+        return CameraOrientation.name
+
     if (STANDARD_TYPE_MAP.containsKey(type))
         return STANDARD_TYPE_MAP.getValue(type)
 

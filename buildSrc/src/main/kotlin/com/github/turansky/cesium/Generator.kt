@@ -23,13 +23,14 @@ internal fun generateKotlinDeclarations(
 
     parseDeclarations(definitionsFile)
         .asSequence()
+        .plus(CameraOrientation)
         .sortedBy(Declaration::name)
         .forEach { declaration ->
             val file = cesiumDir.resolve("${declaration.name}.kt")
             val code = declaration.toCode()
             if (!file.exists()) {
                 val content = "// $GENERATOR_COMMENT\n\n" +
-                        if ("\nexternal " in code) {
+                        if (hasRuntimeDeclarations(code)) {
                             if (LAZY_MODE) {
                                 code.addLazyAnnotations()
                             } else {
@@ -43,6 +44,16 @@ internal fun generateKotlinDeclarations(
                 file.appendText("\n\n" + code)
             }
         }
+}
+
+private fun hasRuntimeDeclarations(code: String): Boolean {
+    if ("\nexternal " !in code)
+        return false
+
+    if (code.count("\nexternal ") == code.count("\nexternal interface"))
+        return "companion object" in code
+
+    return true
 }
 
 private val LAZY_REGEXP = Regex("""\n *external +(.+)\n""")
