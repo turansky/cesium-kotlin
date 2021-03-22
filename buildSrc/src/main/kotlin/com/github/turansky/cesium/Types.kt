@@ -8,7 +8,7 @@ internal fun typeDeclaration(
     return if (body.startsWith("(")) {
         "typealias ${applyCallbackFix(name)} = ${typeBody(body)}"
     } else {
-        val modifier = if (top) "external " else ""
+        val modifier = if (top) "external" else ""
         "$modifier interface $name {\n${optionsBody(body)}\n}"
     }
 }
