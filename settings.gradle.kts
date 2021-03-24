@@ -12,3 +12,5 @@ pluginManagement {
 
 include("cesium-kotlin")
 include("cesium-kotlin-nm")
+
+include("examples:cartesian")
