@@ -14,7 +14,21 @@ dependencies {
 }
 ```
 
-## 🔧 Generation
+## 👷 Features
+
+* 🔧 Fixed inheritance
+    * Missed in TypeScript
+    * In progress
+* 🧐 Numberability
+    * `Int`/`Double` instead of `Number`
+    * In progress
+* 💡 KDoc
+
+## 🌐 Online documentation
+
+TBD
+
+## 🏗 Generation
 
 * Run `./gradlew build`
 * Check folder `cesium-kotlin/src/main/kotlin`
