@@ -24,7 +24,7 @@ dependencies {
     * In progress
 * 💡 KDoc
 
-## 🌐 Online documentation
+## 🌐 Online documentation links
 
 ![Example](assets/online-documentation.gif)
 
