@@ -26,7 +26,7 @@ dependencies {
 
 ## 🌐 Online documentation
 
-TBD
+![Example](assets/online-documentation.gif)
 
 ## 🏗 Generation
 
