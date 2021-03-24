@@ -4,7 +4,17 @@
 
 # Kotlin/JS support for [Cesium](https://github.com/CesiumGS/cesium)
 
-## Generation
+## 🚀 Get Started
+
+Add `cesium-kotlin` dependency:
+
+```kotlin
+dependencies {
+    implementation("com.github.turansky.cesium:cesium-kotlin:1.79.1-103")
+}
+```
+
+## 🔧 Generation
 
 * Run `./gradlew build`
 * Check folder `cesium-kotlin/src/main/kotlin`
