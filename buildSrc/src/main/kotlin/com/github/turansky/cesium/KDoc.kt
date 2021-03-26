@@ -62,7 +62,7 @@ internal fun kdoc(doc: String, link: DocLink?): String {
         .replace("<br>", "")
         .replace(P_REGEX, "$1")
         .replace(IMG_REGEX, "")
-        .replace(PRE_CODE_REGEX, "```$1```")
+        .replace(PRE_CODE_REGEX, ::codeBlock)
         .replace(PRE_REGEX, "```$1```")
         .replace(CODE_REGEX, "`$1`")
         .replace(CODE_MULTILINE_REGEX, "```$1```")
@@ -99,6 +99,18 @@ internal fun kdoc(doc: String, link: DocLink?): String {
 
 private fun seeDoc(link: DocLink): String =
     """@see <a href="${link.href}">Online Documentation</a>"""
+
+private fun codeBlock(result: MatchResult): String =
+    codeBlock(result.groupValues[1])
+
+private fun codeBlock(code: String): String {
+    val result = code
+        .replace("\nCesium.", "\n")
+        .replace(" Cesium.", " ")
+        .replace("(Cesium.", "(")
+
+    return "```$result```"
+}
 
 private fun listItems(source: String): String =
     LI_REGEX.findAll(source)
