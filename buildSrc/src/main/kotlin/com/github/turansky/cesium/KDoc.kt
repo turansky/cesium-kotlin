@@ -62,7 +62,7 @@ internal fun kdoc(doc: String, link: DocLink?): String {
         .replace("<br>", "")
         .replace(P_REGEX, "$1")
         .replace(IMG_REGEX, "")
-        .replace(PRE_CODE_REGEX, ::codeBlock)
+        .replace(PRE_CODE_REGEX, "```$1```")
         .replace(PRE_REGEX, "```$1```")
         .replace(CODE_REGEX, "`$1`")
         .replace(CODE_MULTILINE_REGEX, "```$1```")
@@ -100,17 +100,10 @@ internal fun kdoc(doc: String, link: DocLink?): String {
 private fun seeDoc(link: DocLink): String =
     """@see <a href="${link.href}">Online Documentation</a>"""
 
-private fun codeBlock(result: MatchResult): String =
-    codeBlock(result.groupValues[1])
-
-private fun codeBlock(code: String): String {
-    val result = code
-        .replace("\nCesium.", "\n")
+private fun cleanupCode(code: String): String =
+    code.replace("\nCesium.", "\n")
         .replace(" Cesium.", " ")
         .replace("(Cesium.", "(")
-
-    return "```$result```"
-}
 
 private fun listItems(source: String): String =
     LI_REGEX.findAll(source)
@@ -134,7 +127,7 @@ private fun formatBlocks(source: String): String =
 
 private fun formatBlock(source: String): String =
     when {
-        source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n$it\n```" }
+        source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n${cleanupCode(it)}\n```" }
         source.startsWith("@param ") -> formatParam(source, "@param ")
         source.startsWith("@property ") -> formatParam(source, "@property ")
         source.startsWith("@returns") -> source.replace("@returns", "@return").multiline()
