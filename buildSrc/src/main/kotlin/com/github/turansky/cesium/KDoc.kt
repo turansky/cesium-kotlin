@@ -40,7 +40,11 @@ private val TYPE_REGEX = Regex("""[A-Z]\w+""")
 private val CONSTANT_REGEX = Regex("""[A-Z][\w\d]+\.[A-Z\d_]+""")
 private val MEMBER_REGEX = Regex("""[A-Z]\w+\.\w+""")
 
-internal fun kdoc(doc: String, link: DocLink?): String {
+internal fun kdoc(
+    doc: String,
+    link: DocLink?,
+    hideParams: Boolean
+): String {
     if (doc.isEmpty())
         return ""
 
@@ -75,7 +79,7 @@ internal fun kdoc(doc: String, link: DocLink?): String {
         .replace(LINK_HTTP_NAMED_2_REGEX, "[$1]($2)")
         .replace(LINK_HTTP_REGEX, "[$1]")
         .trim()
-        .let(::formatBlocks)
+        .let { formatBlocks(it, hideParams) }
 
     val seeLink = link?.let { seeDoc(it) }
     if (link?.typeMode == true && "\n@param " in source) {
@@ -121,7 +125,10 @@ private fun listItems(source: String): String =
         .map { it.multiline() }
         .joinToString("\n")
 
-private fun formatBlocks(source: String): String =
+private fun formatBlocks(
+    source: String,
+    hideParams: Boolean
+): String =
     KDOC_KEYWORDS
         .fold(source) { acc, keyword ->
             acc.replace("$keyword ", "$DELIMITER$keyword ")
@@ -130,13 +137,16 @@ private fun formatBlocks(source: String): String =
         .splitToSequence(DELIMITER)
         .map { it.trim() }
         .filter { it.isNotEmpty() }
-        .map { formatBlock(it) }
+        .mapNotNull { formatBlock(it, hideParams) }
         .joinToString("\n")
 
-private fun formatBlock(source: String): String =
+private fun formatBlock(
+    source: String,
+    hideParams: Boolean
+): String? =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n${cleanupCode(it)}\n```" }
-        source.startsWith("@param ") -> formatParam(source, "@param ")
+        source.startsWith("@param ") -> if (!hideParams) formatParam(source, "@param ") else null
         source.startsWith("@property ") -> formatParam(source, "@property ")
         source.startsWith("@returns") -> source.replace("@returns", "@return").multiline()
         else -> source

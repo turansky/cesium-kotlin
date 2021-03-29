@@ -125,8 +125,10 @@ internal abstract class TypeBase(
         val modifiers = (if (top) "external " else "") +
                 (if (abstract) "abstract " else "")
 
+        val hideParams = constructor != null && !constructor.hasParameters
+
         return header +
-                source.doc(DocLink(this)) +
+                source.doc(DocLink(this), hideParams) +
                 "\n" +
                 "$modifiers $typeName $name $body" +
                 (constructor?.toExtensionCode() ?: "")

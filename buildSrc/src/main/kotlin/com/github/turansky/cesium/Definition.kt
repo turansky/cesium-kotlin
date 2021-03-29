@@ -41,8 +41,11 @@ internal data class Definition(
     val defaultName: String
         get() = body.substringBefore(" ")
 
-    fun doc(link: DocLink? = null): String =
-        kdoc(doc, link)
+    fun doc(
+        link: DocLink? = null,
+        hideParams: Boolean = false
+    ): String =
+        kdoc(doc, link, hideParams)
 }
 
 internal fun parseTopDefinition(

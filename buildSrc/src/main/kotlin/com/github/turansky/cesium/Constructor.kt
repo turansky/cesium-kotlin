@@ -25,6 +25,10 @@ internal class Constructor(
         hasHiddenOptions()
     }
 
+    val hasParameters: Boolean by lazy {
+        parameters.size > 1 || (parameters.size == 1 && !hiddenOptions)
+    }
+
     override fun toCode(): String =
         parameters
             .dropLast(if (hiddenOptions) 1 else 0)
