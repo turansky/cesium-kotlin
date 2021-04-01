@@ -162,6 +162,7 @@ private fun formatBlock(
             hideParams -> null
             hideOptions && source.startsWith("@param options.") -> null
             hideOptions && source.startsWith("@param [options.") -> null
+            source.endsWith("Object with the following properties:") -> null
             else -> formatParam(source, "@param ")
         }
         source.startsWith("@property ") -> formatParam(source, "@property ")
