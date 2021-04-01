@@ -40,15 +40,14 @@ private val TYPE_REGEX = Regex("""[A-Z]\w+""")
 private val CONSTANT_REGEX = Regex("""[A-Z][\w\d]+\.[A-Z\d_]+""")
 private val MEMBER_REGEX = Regex("""[A-Z]\w+\.\w+""")
 
-internal fun kdoc(
+internal fun kdocBody(
     doc: String,
-    link: DocLink?,
     hideParams: Boolean
 ): String {
     if (doc.isEmpty())
         return ""
 
-    var source = doc.removePrefix("/**\n")
+    return doc.removePrefix("/**\n")
         .substringBeforeLast("\n")
         .trimMargin("*")
         .splitToSequence("\n")
@@ -80,6 +79,16 @@ internal fun kdoc(
         .replace(LINK_HTTP_REGEX, "[$1]")
         .trim()
         .let { formatBlocks(it, hideParams) }
+}
+
+internal fun kdoc(
+    body: String,
+    link: DocLink?
+): String {
+    if (body.isEmpty())
+        return ""
+
+    var source = body
 
     val seeLink = link?.let { seeDoc(it) }
     if (link?.typeMode == true && "\n@param " in source) {

@@ -44,8 +44,10 @@ internal data class Definition(
     fun doc(
         link: DocLink? = null,
         hideParams: Boolean = false
-    ): String =
-        kdoc(doc, link, hideParams)
+    ): String {
+        val source = kdocBody(doc, hideParams)
+        return kdoc(source, link)
+    }
 }
 
 internal fun parseTopDefinition(
