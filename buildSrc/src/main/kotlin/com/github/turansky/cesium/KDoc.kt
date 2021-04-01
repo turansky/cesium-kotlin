@@ -42,7 +42,8 @@ private val MEMBER_REGEX = Regex("""[A-Z]\w+\.\w+""")
 
 internal fun kdocBody(
     doc: String,
-    hideParams: Boolean
+    hideParams: Boolean,
+    hideOptions: Boolean
 ): String {
     if (doc.isEmpty())
         return ""
@@ -78,7 +79,7 @@ internal fun kdocBody(
         .replace(LINK_HTTP_NAMED_2_REGEX, "[$1]($2)")
         .replace(LINK_HTTP_REGEX, "[$1]")
         .trim()
-        .let { formatBlocks(it, hideParams) }
+        .let { formatBlocks(it, hideParams, hideOptions) }
 }
 
 internal fun kdoc(
@@ -136,7 +137,8 @@ private fun listItems(source: String): String =
 
 private fun formatBlocks(
     source: String,
-    hideParams: Boolean
+    hideParams: Boolean,
+    hideOptions: Boolean
 ): String =
     KDOC_KEYWORDS
         .fold(source) { acc, keyword ->
@@ -146,16 +148,22 @@ private fun formatBlocks(
         .splitToSequence(DELIMITER)
         .map { it.trim() }
         .filter { it.isNotEmpty() }
-        .mapNotNull { formatBlock(it, hideParams) }
+        .mapNotNull { formatBlock(it, hideParams, hideOptions) }
         .joinToString("\n")
 
 private fun formatBlock(
     source: String,
-    hideParams: Boolean
+    hideParams: Boolean,
+    hideOptions: Boolean
 ): String? =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n${cleanupCode(it)}\n```" }
-        source.startsWith("@param ") -> if (!hideParams) formatParam(source, "@param ") else null
+        source.startsWith("@param ") -> when {
+            hideParams -> null
+            hideOptions && source.startsWith("@param options.") -> null
+            hideOptions && source.startsWith("@param [options.") -> null
+            else -> formatParam(source, "@param ")
+        }
         source.startsWith("@property ") -> formatParam(source, "@property ")
         source.startsWith("@returns") -> source.replace("@returns", "@return").multiline()
         else -> source

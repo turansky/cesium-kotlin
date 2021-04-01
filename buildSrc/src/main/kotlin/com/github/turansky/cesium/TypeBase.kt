@@ -128,7 +128,7 @@ internal abstract class TypeBase(
         val hideParams = constructor != null && !constructor.hasParameters
 
         return header +
-                source.doc(DocLink(this), hideParams) +
+                source.doc(DocLink(this), hideParams, false) +
                 "\n" +
                 "$modifiers $typeName $name $body" +
                 (constructor?.toExtensionCode() ?: "")

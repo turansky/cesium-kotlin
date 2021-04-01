@@ -37,7 +37,7 @@ private fun Definition.toMembers(): Sequence<Member> =
             val optionTypes = OPTIONS_REGEX.findAll(constructorBody)
                 .map { it.groupValues[1] }
                 .flatMap { source ->
-                    val types = source.toOptionTypes("Constructor", false)
+                    val types = source.toOptionTypes("Constructor", false, optionsKdocBody())
                     constructorBody = constructorBody.replaceFirst(source, types.first().name)
                     types.asSequence()
                 }
@@ -72,7 +72,7 @@ internal fun Definition.toMethodMembers(): Sequence<Member> {
     val optionTypes = OPTIONS_REGEX.findAll(parameters)
         .map { it.groupValues[1] }
         .flatMap { source ->
-            val types = source.toOptionTypes(prefix, static)
+            val types = source.toOptionTypes(prefix, static, optionsKdocBody())
             methodBody = methodBody.replaceFirst(source, types.first().name)
             types.asSequence()
         }
@@ -89,7 +89,8 @@ private fun String.isPropertyLike(): Boolean {
 
 private fun String.toOptionTypes(
     prefix: String,
-    static: Boolean
+    static: Boolean,
+    docBody: String
 ): List<SimpleType> {
     val name = "${prefix}Options"
 
@@ -107,6 +108,6 @@ private fun String.toOptionTypes(
             SimpleType(Definition("", typeBody), static)
         }.toList()
 
-    val type = SimpleType(Definition("", "$name = $body"), static)
+    val type = SimpleType(Definition("", "$name = $body").also { it.docBody = docBody }, static)
     return listOf(type) + innerTypes
 }

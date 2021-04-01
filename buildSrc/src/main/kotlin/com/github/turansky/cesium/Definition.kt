@@ -34,6 +34,8 @@ internal data class Definition(
     private val doc: String,
     val body: String
 ) {
+    var docBody: String? = null
+
     val abstract: Boolean
         get() = "* The interface for " in doc ||
                 "be instantiated directly." in doc
@@ -43,10 +45,27 @@ internal data class Definition(
 
     fun doc(
         link: DocLink? = null,
-        hideParams: Boolean = false
-    ): String {
-        val source = kdocBody(doc, hideParams)
-        return kdoc(source, link)
+        hideParams: Boolean = false,
+        hideOptions: Boolean = true
+    ): String =
+        if (docBody != null) {
+            kdoc(docBody!!, null)
+        } else {
+            val source = kdocBody(doc, hideParams, hideOptions)
+            kdoc(source, link)
+        }
+
+    fun optionsKdocBody(): String {
+        val source = kdocBody(doc, false, false)
+            .takeIf { it.isNotEmpty() }
+            ?: ""
+
+        return source
+            .splitToSequence("@param ", "@return ")
+            .filter { it.startsWith("[options.") }
+            .map { it.removePrefix("[options.") }
+            .map { "@param [$it".trimEnd() }
+            .joinToString("\n")
     }
 }
 
