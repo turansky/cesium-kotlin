@@ -63,7 +63,8 @@ internal data class Definition(
             .splitToSequence("@param ", "@return ")
             .filter { it.startsWith("[options.") }
             .map { it.removePrefix("[options.") }
-            .map { "@param [$it".trimEnd() }
+            // TODO: move to concrete properties instead
+            .map { "@property [$it".trimEnd() }
             .joinToString("\n")
     }
 }
