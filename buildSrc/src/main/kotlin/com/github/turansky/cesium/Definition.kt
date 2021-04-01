@@ -45,13 +45,12 @@ internal data class Definition(
 
     fun doc(
         link: DocLink? = null,
-        hideParams: Boolean = false,
-        hideOptions: Boolean = true
+        hideParams: Boolean = false
     ): String =
         if (docBody != null) {
             kdoc(docBody!!, null)
         } else {
-            val source = kdocBody(doc, hideParams, hideOptions)
+            val source = kdocBody(doc, hideParams, true)
             kdoc(source, link)
         }
 

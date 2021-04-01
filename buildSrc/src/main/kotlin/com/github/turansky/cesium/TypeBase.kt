@@ -19,7 +19,7 @@ internal abstract class TypeBase(
     }
 
     override val members by lazy {
-        members(source.body)
+        members(source.body, source.optionsKdocBody())
             .onEach { it.parent = this }
             .onEach { if (!it.static) it.abstract = abstract }
     }
@@ -128,7 +128,7 @@ internal abstract class TypeBase(
         val hideParams = constructor != null && !constructor.hasParameters
 
         return header +
-                source.doc(DocLink(this), hideParams, false) +
+                source.doc(DocLink(this), hideParams) +
                 "\n" +
                 "$modifiers $typeName $name $body" +
                 (constructor?.toExtensionCode() ?: "")

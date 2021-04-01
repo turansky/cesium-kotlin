@@ -4,7 +4,8 @@ private val OPTIONS_REGEX = Regex("""options\??: (\{.+})""", RegexOption.DOT_MAT
 private val INNER_OPTIONS_REGEX = Regex("""(\w+\??): \{.+?}""", RegexOption.DOT_MATCHES_ALL)
 
 internal fun members(
-    body: String
+    body: String,
+    optionsDoc: String
 ): List<Member> {
     if (body.endsWith("{\n}"))
         return emptyList()
@@ -15,11 +16,11 @@ internal fun members(
         .splitToSequence(";\n    /")
         .map { if (it.startsWith("**")) "/$it" else it }
         .flatMap { parseTopDefinition(it) }
-        .flatMap { it.toMembers() }
+        .flatMap { it.toMembers(optionsDoc) }
         .toList()
 }
 
-private fun Definition.toMembers(): Sequence<Member> =
+private fun Definition.toMembers(optionsDoc: String): Sequence<Member> =
     when {
         body.startsWith("namespace ") -> {
             val newBody = body
@@ -37,7 +38,7 @@ private fun Definition.toMembers(): Sequence<Member> =
             val optionTypes = OPTIONS_REGEX.findAll(constructorBody)
                 .map { it.groupValues[1] }
                 .flatMap { source ->
-                    val types = source.toOptionTypes("Constructor", false, optionsKdocBody())
+                    val types = source.toOptionTypes("Constructor", false, optionsDoc)
                     constructorBody = constructorBody.replaceFirst(source, types.first().name)
                     types.asSequence()
                 }
