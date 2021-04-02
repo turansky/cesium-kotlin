@@ -8,14 +8,17 @@ internal class Parameter(
         .removeSuffix("?")
         .let { if (it == "object") "obj" else it }
 
-    val type: String by lazy {
-        kotlinType(body.substringAfter(": "), name)
-    }
-
     private val vararg: Boolean by lazy { "..." in body.substringBefore("{") }
 
+    val type: String by lazy {
+        val source = body.substringAfter(": ")
+            .let { if (vararg) it.removeSuffix("[]") else it }
+
+        kotlinType(source, name)
+    }
+
     val optional: Boolean by lazy { "?:" in body.substringBefore("{") }
-    private val nullable: Boolean = optional && !type.startsWith("dynamic")
+    private val nullable: Boolean by lazy { optional && !type.startsWith("dynamic") }
 
     var supportDefault: Boolean = true
 
