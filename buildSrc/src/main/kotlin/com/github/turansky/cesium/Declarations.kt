@@ -135,6 +135,7 @@ private fun readDeclarations(
         .replace("* /**", "*")
         .replace("[webAssemblyOptions", "[options")
         .replace("(webAssemblyOptions", "(options")
+        .applyCorrection80()
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .map { "/**$it" }
@@ -149,3 +150,32 @@ private fun readDeclarations(
             FACTORY_MAP.getValue(prefix)(newSource)
         }
         .toList()
+
+// WA for https://github.com/CesiumGS/cesium/issues/9465
+private fun String.applyCorrection80(): String {
+    var correctionMode = false
+    var correction = ""
+
+    return splitToSequence("\n")
+        .map { s ->
+            val t = s.trim()
+            if (correctionMode) {
+                when {
+                    t.startsWith("*/") -> {
+                        correctionMode = false
+                        s
+                    }
+                    t.startsWith("*") -> s
+                    else -> s.replaceFirst(correction, "$correction * ")
+                }
+            } else {
+                if (t.startsWith("/**")) {
+                    correction = s.substringBefore("/**")
+                    correctionMode = true
+                }
+
+                s
+            }
+        }
+        .joinToString("\n")
+}
