@@ -156,6 +156,8 @@ private fun String.applyTypeAliasCorrection(): String =
     replace("Geocoder.DestinationFoundFunction", "DestinationFoundFunction")
         .replace("TimeInterval.DataComparer", "DataComparer")
         .replace("TimeInterval.MergeCallback", "MergeCallback")
+        .replace("EasingFunction.Callback", "EasingCallback")
+        .replace("CallbackProperty.Callback", "CallbackPropertyCallback")
 
 // WA for https://github.com/CesiumGS/cesium/issues/9465
 private fun String.applyCorrection80(): String {

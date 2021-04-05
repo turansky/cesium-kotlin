@@ -35,9 +35,20 @@ internal class SimpleType(
             DocLink(this)
         }
 
+        var declaration = typeDeclaration(source.body, false)
+        if (name == "Callback") {
+            val longName = when (parent.name) {
+                "EasingFunction" -> "EasingCallback"
+                "CallbackProperty" -> "CallbackPropertyCallback"
+                else -> TODO()
+            }
+
+            declaration = declaration.replaceFirst(name, longName)
+        }
+
         return source.doc(link)
             .let { if (it.isNotEmpty()) "$it\n" else "" } +
-                modifier + typeDeclaration(source.body, false)
+                modifier + declaration
     }
 
     override fun equals(other: Any?): Boolean =
