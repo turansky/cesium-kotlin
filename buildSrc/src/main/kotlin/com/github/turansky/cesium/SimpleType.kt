@@ -10,6 +10,10 @@ internal class SimpleType(
     override val docName: String =
         ".$name"
 
+    val isTypeAlias: Boolean by lazy {
+        isTypeAlias(source.body)
+    }
+
     val parameterNames: List<String> by lazy {
         source.body
             .substringAfter("\n")

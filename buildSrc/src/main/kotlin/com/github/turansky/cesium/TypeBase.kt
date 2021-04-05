@@ -25,13 +25,14 @@ internal abstract class TypeBase(
     }
 
     open fun suppresses(): List<Suppress> {
-        val hasAliases = sequenceOf(this, companion)
+        val hasTypeAliases = sequenceOf(this, companion)
             .filterNotNull()
             .flatMap { it.members.asSequence() }
-            .any { it is SimpleType }
+            .filterIsInstance<SimpleType>()
+            .any { it.isTypeAlias }
 
         return mutableListOf<Suppress>().apply {
-            if (hasAliases)
+            if (hasTypeAliases)
                 add(TOPLEVEL_TYPEALIASES_ONLY)
 
             if (parents.isNotEmpty() && name.endsWith(TERRAIN_PROVIDER)) {
@@ -40,7 +41,7 @@ internal abstract class TypeBase(
             }
 
             val constructor = members.firstOrNull() as? Constructor
-            if (constructor != null && constructor.hasOptions)
+            if ((constructor != null && constructor.hasOptions))
                 add(NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE)
         }
     }
@@ -62,7 +63,7 @@ internal abstract class TypeBase(
             ?.filter { it.isNestedType() }
             ?: emptyList()
 
-        var body = members
+        val bodyMembers = members
             .asSequence()
             .filter { it != constructor }
             .filter { staticBody || !it.static }
@@ -70,6 +71,24 @@ internal abstract class TypeBase(
             // WA for duplicated option types
             .distinct()
             .filter(constructor.toMemberFilter())
+            .toList()
+
+        /*
+        val typeAliases = bodyMembers
+            .filterIsInstance<SimpleType>()
+            .filter { it.isTypeAlias }
+        */
+
+        val typeAliases = emptyList<Member>()
+
+        val aliases = typeAliases
+            .takeIf { it.isNotEmpty() }
+            ?.joinToString("\n\n", "\n", "\n") { it.toCode() }
+            ?: ""
+
+        var body = bodyMembers
+            .asSequence()
+            .minus(typeAliases)
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
@@ -131,6 +150,7 @@ internal abstract class TypeBase(
                 source.doc(DocLink(this), hideParams) +
                 "\n" +
                 "$modifiers $typeName $name $body" +
+                aliases +
                 (constructor?.toExtensionCode() ?: "")
     }
 }

@@ -1,5 +1,12 @@
 package com.github.turansky.cesium
 
+internal fun isTypeAlias(
+    source: String
+): Boolean =
+    source.split(" = ")
+        .get(1)
+        .startsWith("(")
+
 internal fun typeDeclaration(
     source: String,
     top: Boolean
