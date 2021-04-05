@@ -75,6 +75,13 @@ internal abstract class TypeBase(
             .filter { it.isTypeAlias }
 
         val aliases = typeAliases
+            .filter {
+                when (it.name) {
+                    "RemoveCallback" -> name == "Event"
+                    "DoneCallback" -> name == "KmlTourFlyTo"
+                    else -> true
+                }
+            }
             .takeIf { it.isNotEmpty() }
             ?.joinToString("\n\n", "\n", "\n") { it.toCode() }
             ?: ""
