@@ -136,6 +136,7 @@ private fun readDeclarations(
         .replace("[webAssemblyOptions", "[options")
         .replace("(webAssemblyOptions", "(options")
         .applyCorrection80()
+        .applyTypeAliasCorrection()
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
         .map { "/**$it" }
@@ -150,6 +151,11 @@ private fun readDeclarations(
             FACTORY_MAP.getValue(prefix)(newSource)
         }
         .toList()
+
+private fun String.applyTypeAliasCorrection(): String =
+    replace("Geocoder.DestinationFoundFunction", "DestinationFoundFunction")
+        .replace("TimeInterval.DataComparer", "DataComparer")
+        .replace("TimeInterval.MergeCallback", "MergeCallback")
 
 // WA for https://github.com/CesiumGS/cesium/issues/9465
 private fun String.applyCorrection80(): String {

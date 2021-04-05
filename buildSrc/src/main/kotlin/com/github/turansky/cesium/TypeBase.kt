@@ -32,16 +32,13 @@ internal abstract class TypeBase(
             .any { it.isTypeAlias }
 
         return mutableListOf<Suppress>().apply {
-            if (hasTypeAliases)
-                add(TOPLEVEL_TYPEALIASES_ONLY)
-
             if (parents.isNotEmpty() && name.endsWith(TERRAIN_PROVIDER)) {
                 add(VAR_OVERRIDDEN_BY_VAL)
                 add(VAR_TYPE_MISMATCH_ON_OVERRIDE)
             }
 
             val constructor = members.firstOrNull() as? Constructor
-            if ((constructor != null && constructor.hasOptions))
+            if (hasTypeAliases || (constructor != null && constructor.hasOptions))
                 add(NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE)
         }
     }
@@ -73,13 +70,9 @@ internal abstract class TypeBase(
             .filter(constructor.toMemberFilter())
             .toList()
 
-        /*
         val typeAliases = bodyMembers
             .filterIsInstance<SimpleType>()
             .filter { it.isTypeAlias }
-        */
-
-        val typeAliases = emptyList<Member>()
 
         val aliases = typeAliases
             .takeIf { it.isNotEmpty() }
