@@ -6,6 +6,13 @@ private val INTEGER_NAMES = setOf(
     "level",
     "length",
 
+    "retryAttempts",
+    "componentsPerAttribute",
+    "cacheCapacity",
+
+    "tileWidth",
+    "tileHeight",
+
     "year",
     "month",
     "day",
