@@ -11,8 +11,24 @@ private val INTEGER_NAMES = setOf(
     "cacheCapacity",
     "skipLevels",
 
+    "canvasSize",
+    "tilesize", // spelling error?
     "tileWidth",
     "tileHeight",
+    "tileCacheSize",
+
+    "channel",
+    "cells",
+    "glowWidth",
+
+    "row",
+    "column",
+
+    "emissionRate",
+
+    "statusCode",
+    "maximumRequests",
+    "maximumRequestsPerServer",
 
     "year",
     "month",
@@ -22,7 +38,11 @@ private val INTEGER_NAMES = setOf(
     "second",
     "millisecond",
 
-    "indexOf"
+    "indexOf",
+
+    "minimumFrameRateDuringWarmup",
+    "minimumFrameRateAfterWarmup",
+    "loadingDescendantLimit"
 )
 
 internal fun isInteger(name: String?): Boolean {
@@ -36,6 +56,7 @@ internal fun isInteger(name: String?): Boolean {
 
         name.startsWith("numberOf") -> true
 
+        name.endsWith("Id") -> true
         name.endsWith("Index") -> true
         name.endsWith("Level") -> true
         name.endsWith("Length") -> true
