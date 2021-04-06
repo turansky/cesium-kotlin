@@ -9,6 +9,7 @@ private val INTEGER_NAMES = setOf(
     "retryAttempts",
     "componentsPerAttribute",
     "cacheCapacity",
+    "skipLevels",
 
     "tileWidth",
     "tileHeight",
@@ -39,6 +40,8 @@ internal fun isInteger(name: String?): Boolean {
         name.endsWith("Level") -> true
         name.endsWith("Length") -> true
         name.endsWith("Partitions") -> true
+        name.endsWith("SpaceError") -> true
+        name.endsWith("MemoryUsage") -> true
 
         else -> false
     }
