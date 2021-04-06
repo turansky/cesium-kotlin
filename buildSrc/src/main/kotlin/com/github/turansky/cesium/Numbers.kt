@@ -31,6 +31,7 @@ internal fun isInteger(name: String?): Boolean {
         name.endsWith("Index") -> true
         name.endsWith("Level") -> true
         name.endsWith("Length") -> true
+        name.endsWith("Partitions") -> true
 
         else -> false
     }
