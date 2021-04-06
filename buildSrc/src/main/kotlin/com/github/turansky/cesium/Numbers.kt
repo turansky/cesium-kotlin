@@ -12,7 +12,9 @@ private val INTEGER_NAMES = setOf(
     "hour",
     "minute",
     "second",
-    "millisecond"
+    "millisecond",
+
+    "indexOf"
 )
 
 internal fun isInteger(name: String?): Boolean {
@@ -22,6 +24,7 @@ internal fun isInteger(name: String?): Boolean {
         name in INTEGER_NAMES -> true
 
         name == "focalLength" -> false
+        name == "chordLength" -> false
 
         name.startsWith("numberOf") -> true
 

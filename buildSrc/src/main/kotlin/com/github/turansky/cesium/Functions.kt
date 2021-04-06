@@ -12,8 +12,8 @@ internal fun Definition.parseFunctionParameters(): List<Parameter> =
         .map(::Parameter)
         .toList()
 
-internal fun Definition.parseFunctionReturnType(): String? =
+internal fun Definition.parseFunctionReturnType(name: String): String? =
     body.substringAfterLast("): ")
-        .let { kotlinType(it) }
+        .let { kotlinType(it, name) }
         .takeIf { it != "Unit" }
 

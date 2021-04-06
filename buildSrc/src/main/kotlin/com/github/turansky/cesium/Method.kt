@@ -17,7 +17,7 @@ internal class Method(
     }
 
     private val parameters = source.parseFunctionParameters()
-    private val returnType = source.parseFunctionReturnType()
+    private val returnType = source.parseFunctionReturnType(name)
 
     override fun toCode(): String {
         if (name == "toString" && parameters.isEmpty())
