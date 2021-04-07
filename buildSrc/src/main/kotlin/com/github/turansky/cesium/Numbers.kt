@@ -36,6 +36,7 @@ private val INTEGER_NAMES = setOf(
     "lastFramesPerSecond",
     "negativeAltitudeExponentBias",
 
+    "port",
     "statusCode",
     "maximumRequests",
     "maximumRequestsPerServer",
@@ -47,6 +48,11 @@ private val INTEGER_NAMES = setOf(
     "minute",
     "second",
     "millisecond",
+
+    "days",
+    "hours",
+    "minutes",
+    "seconds",
 
     "indexOf",
     "indexOfCollection",
