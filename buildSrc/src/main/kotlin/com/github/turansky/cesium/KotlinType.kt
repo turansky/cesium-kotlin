@@ -97,7 +97,7 @@ internal fun kotlinType(
         } else type
 
     if (type.endsWith(" | undefined") && type.indexOf("|") == type.lastIndexOf("|"))
-        return kotlinType(type.removeSuffix(" | undefined")) + "?"
+        return kotlinType(type.removeSuffix(" | undefined"), name) + "?"
 
     if (type.endsWith("[]") && "|" !in type)
         return "Array<out ${kotlinType(type.removeSuffix("[]"))}>"
