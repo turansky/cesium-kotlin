@@ -24,7 +24,17 @@ private val INTEGER_NAMES = setOf(
     "row",
     "column",
 
+    "baseResolution",
+    "maximumAttenuation",
+    "skipScreenSpaceErrorFactor",
     "emissionRate",
+    "slices",
+
+    "pixelRange",
+    "minimumClusterSize",
+    "sampleDuration",
+    "lastFramesPerSecond",
+    "negativeAltitudeExponentBias",
 
     "statusCode",
     "maximumRequests",
@@ -39,10 +49,16 @@ private val INTEGER_NAMES = setOf(
     "millisecond",
 
     "indexOf",
+    "indexOfCollection",
+    "binarySearch",
 
+    "targetFrameRate",
     "minimumFrameRateDuringWarmup",
     "minimumFrameRateAfterWarmup",
-    "loadingDescendantLimit"
+    "loadingDescendantLimit",
+
+    "SIXTY_FOUR_KILOBYTES",
+    "FOUR_GIGABYTES"
 )
 
 internal fun isInteger(name: String?): Boolean {
@@ -63,6 +79,8 @@ internal fun isInteger(name: String?): Boolean {
         name.endsWith("Partitions") -> true
         name.endsWith("SpaceError") -> true
         name.endsWith("MemoryUsage") -> true
+        name.endsWith("Bytes") -> true
+        name.endsWith("Frustum") -> true
 
         else -> false
     }
