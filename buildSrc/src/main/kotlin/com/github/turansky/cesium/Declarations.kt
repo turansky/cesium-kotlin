@@ -135,6 +135,7 @@ private fun readDeclarations(
         .replace("* /**", "*")
         .replace("[webAssemblyOptions", "[options")
         .replace("(webAssemblyOptions", "(options")
+        .replace("The DOM element or ID", "The DOM element")
         .applyCorrection80()
         .applyTypeAliasCorrection()
         .splitToSequence("\n\n/**")
