@@ -1,6 +1,9 @@
 package com.github.turansky.cesium
 
 private val INTEGER_NAMES = setOf(
+    "m",
+    "n",
+
     "index",
     "key",
     "level",
@@ -16,6 +19,12 @@ private val INTEGER_NAMES = setOf(
     "tileWidth",
     "tileHeight",
     "tileCacheSize",
+    "childTileMask",
+
+    "elementsPerHeight",
+    "stride",
+    "inputOrder",
+    "outputOrder",
 
     "channel",
     "cells",
@@ -54,9 +63,15 @@ private val INTEGER_NAMES = setOf(
     "minutes",
     "seconds",
 
+    "mod",
+    "factorial",
+
     "indexOf",
     "indexOfCollection",
     "binarySearch",
+    "findTimeInterval",
+    "computeNumberOfVertices",
+    "getRequiredDataPoints",
 
     "targetFrameRate",
     "minimumFrameRateDuringWarmup",
@@ -87,6 +102,8 @@ internal fun isInteger(name: String?): Boolean {
         name.endsWith("MemoryUsage") -> true
         name.endsWith("Bytes") -> true
         name.endsWith("Frustum") -> true
+
+        name.endsWith("OfTwo") -> true
 
         else -> false
     }
