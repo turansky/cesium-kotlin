@@ -53,7 +53,6 @@ internal abstract class TypeBase(
             return emptyList()
 
         val parameterMap = parameters
-            .filter { !it.optional } // TEMP
             .associate { it.name to it.type }
 
         return members.asSequence()
@@ -73,7 +72,9 @@ internal abstract class TypeBase(
 
         val propertyParameters = constructor.propertyParameters()
         for (p in propertyParameters) {
-            constructorBody = constructorBody.replaceFirst("${p.name}: ${p.type}", p.declaration)
+            val parameter = "${p.name}: ${p.type}"
+            val param = if ("$parameter?" in constructorBody) "$parameter?" else parameter
+            constructorBody = constructorBody.replaceFirst(param, p.declaration)
         }
 
         val companionMembers = companion?.members
