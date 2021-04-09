@@ -52,15 +52,13 @@ internal abstract class TypeBase(
         if (parameters.isEmpty())
             return emptyList()
 
-        val parameterNames = parameters
+        val parameterMap = parameters
             .filter { !it.optional } // TEMP
-            .filter { it.name == "container" }
-            .map { it.name }
-            .toSet()
+            .associate { it.name to it.type }
 
         return members.asSequence()
             .filterIsInstance<Property>()
-            .filter { it.name in parameterNames }
+            .filter { parameterMap[it.name] == it.type }
             .toList()
     }
 
