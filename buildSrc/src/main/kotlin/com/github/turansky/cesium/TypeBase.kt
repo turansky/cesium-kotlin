@@ -40,7 +40,28 @@ internal abstract class TypeBase(
             val constructor = members.firstOrNull() as? Constructor
             if (hasTypeAliases || (constructor != null && constructor.hasOptions))
                 add(NON_EXTERNAL_DECLARATION_IN_INAPPROPRIATE_FILE)
+
+            if (constructor.propertyParameters().isNotEmpty())
+                add(EXTERNAL_CLASS_CONSTRUCTOR_PROPERTY_PARAMETER)
         }
+    }
+
+    private fun Constructor?.propertyParameters(): List<Property> {
+        this ?: return emptyList()
+
+        if (parameters.isEmpty())
+            return emptyList()
+
+        val parameterNames = parameters
+            .filter { !it.optional } // TEMP
+            .filter { it.name == "container" }
+            .map { it.name }
+            .toSet()
+
+        return members.asSequence()
+            .filterIsInstance<Property>()
+            .filter { it.name in parameterNames }
+            .toList()
     }
 
     override fun toCode(): String =
@@ -48,9 +69,14 @@ internal abstract class TypeBase(
 
     fun toCode(top: Boolean): String {
         val constructor = members.firstOrNull() as? Constructor
-        val constructorBody = constructor?.toCode()
+        var constructorBody = constructor?.toCode()
             ?.removePrefix("constructor")
             ?: ""
+
+        val propertyParameters = constructor.propertyParameters()
+        for (p in propertyParameters) {
+            constructorBody = constructorBody.replaceFirst("${p.name}: ${p.type}", p.declaration)
+        }
 
         val companionMembers = companion?.members
             ?.filterNot { it.isNestedType() }
@@ -89,6 +115,7 @@ internal abstract class TypeBase(
         var body = bodyMembers
             .asSequence()
             .minus(typeAliases)
+            .minus(propertyParameters)
             .map { it.toCode() }
             .filter { it.isNotEmpty() } // TEMP
             .joinToString(separator = "\n\n")
@@ -146,8 +173,13 @@ internal abstract class TypeBase(
 
         val hideParams = constructor != null && !constructor.hasParameters
 
+        val doc = propertyParameters
+            .fold(source.doc(DocLink(this), hideParams)) { acc, p ->
+                acc.replaceFirst("@param [${p.name}]", "@property [${p.name}]")
+            }
+
         return header +
-                source.doc(DocLink(this), hideParams) +
+                doc +
                 "\n" +
                 "$modifiers $typeName $name $body" +
                 aliases +

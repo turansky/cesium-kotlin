@@ -10,7 +10,7 @@ internal class Constructor(
 
     override val static: Boolean = false
 
-    private val parameters = source.body
+    val parameters = source.body
         .splitToSequence(", ")
         .filter { it.isNotEmpty() }
         .map(::Parameter)

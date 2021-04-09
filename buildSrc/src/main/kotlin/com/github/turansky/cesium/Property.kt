@@ -18,11 +18,15 @@ internal class Property(
 
     val type = kotlinType(source.body.substringAfter(": "), name)
 
-    override fun toCode(): String {
-        return source.doc(DocLink(parent, this)) + "\n" +
-                (if (abstract) "abstract " else "") +
+    val declaration: String by lazy {
+        (if (abstract) "abstract " else "") +
                 (if (overridden) "override " else "") +
                 (if (readOnly) "val" else "var") +
                 " $name: $type"
+    }
+
+    override fun toCode(): String {
+        return source.doc(DocLink(parent, this)) + "\n" +
+                declaration
     }
 }
