@@ -3,7 +3,7 @@ package com.github.turansky.cesium
 internal const val CONSTRUCTOR_OPTIONS: String = "ConstructorOptions"
 
 internal class Constructor(
-    override val source: Definition
+    override val source: Definition,
 ) : Member() {
     override val name: String
         get() = TODO()

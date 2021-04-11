@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Property(
-    override val source: Definition
+    override val source: Definition,
 ) : Member() {
     private val data = source.body.substringBefore(": ")
         .split(" ")

@@ -2,7 +2,7 @@ package com.github.turansky.cesium
 
 internal class SimpleType(
     override val source: Definition,
-    override val static: Boolean = false
+    override val static: Boolean = false,
 ) : Member() {
     override val name: String =
         source.defaultName

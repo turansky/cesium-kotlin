@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class TopType(
-    override val source: Definition
+    override val source: Definition,
 ) : Declaration() {
     override val name: String =
         source.defaultName

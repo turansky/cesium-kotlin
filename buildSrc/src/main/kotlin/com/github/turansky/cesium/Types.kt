@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal fun isTypeAlias(
-    source: String
+    source: String,
 ): Boolean =
     source.split(" = ")
         .get(1)
@@ -9,7 +9,7 @@ internal fun isTypeAlias(
 
 internal fun typeDeclaration(
     source: String,
-    top: Boolean
+    top: Boolean,
 ): String {
     val (name, body) = source.split(" = ")
     return if (body.startsWith("(")) {
@@ -21,11 +21,11 @@ internal fun typeDeclaration(
 }
 
 internal fun applyCallbackFix(
-    source: String
+    source: String,
 ): String =
     when (source) {
         "foveatedInterpolationCallback",
-        "updateCallback"
+        "updateCallback",
         -> source.capitalize()
 
         else -> source
@@ -48,7 +48,7 @@ private fun typeBody(body: String): String {
 }
 
 private fun optionsBody(
-    body: String
+    body: String,
 ): String {
     val source = body.removePrefix("{\n")
         .substringBeforeLast("\n")

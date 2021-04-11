@@ -3,7 +3,7 @@ package com.github.turansky.cesium
 import com.github.turansky.cesium.Suppress.*
 
 internal abstract class TypeBase(
-    final override val source: Definition
+    final override val source: Definition,
 ) : Declaration(), IType, HasMembers {
     override val name: String =
         source.defaultName

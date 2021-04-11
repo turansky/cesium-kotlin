@@ -72,7 +72,7 @@ private val STANDARD_TYPE_MAP = mapOf(
 
 internal fun kotlinType(
     type: String,
-    name: String? = null
+    name: String? = null,
 ): String {
     if (type in WHITE_LIST)
         return type

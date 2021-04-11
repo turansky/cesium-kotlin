@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Method(
-    override val source: Definition
+    override val source: Definition,
 ) : Member() {
     override val name = source.parseFunctionName()
     override val docName: String

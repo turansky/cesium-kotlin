@@ -27,7 +27,7 @@ private val FACTORY_MAP = mapOf(
 )
 
 internal fun parseDeclarations(
-    definitionsFile: File
+    definitionsFile: File,
 ): List<Declaration> {
     val declarations = readDeclarations(definitionsFile)
         .toMutableList()
@@ -101,7 +101,7 @@ internal fun parseDeclarations(
 private fun addParentType(
     classMap: Map<String, Class>,
     parentType: String,
-    filter: (String) -> Boolean = { it.endsWith(parentType) }
+    filter: (String) -> Boolean = { it.endsWith(parentType) },
 ) {
     val abstractMembers = classMap.getValue(parentType)
         .overridableMembers()
@@ -124,7 +124,7 @@ private fun Class.overridableMembers(): Sequence<Member> =
         .filter { it is Property || it is Method }
 
 private fun readDeclarations(
-    definitionsFile: File
+    definitionsFile: File,
 ): List<Declaration> =
     definitionsFile.readText()
         .replace("\n}/**", "\n}\n\n/**")

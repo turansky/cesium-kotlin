@@ -5,7 +5,7 @@ private val INNER_OPTIONS_REGEX = Regex("""(\w+\??): \{.+?}""", RegexOption.DOT_
 
 internal fun members(
     body: String,
-    optionsDoc: String
+    optionsDoc: String,
 ): List<Member> {
     if (body.endsWith("{\n}"))
         return emptyList()
@@ -91,7 +91,7 @@ private fun String.isPropertyLike(): Boolean {
 private fun String.toOptionTypes(
     prefix: String,
     static: Boolean,
-    docBody: String
+    docBody: String,
 ): List<SimpleType> {
     val name = "${prefix}Options"
 

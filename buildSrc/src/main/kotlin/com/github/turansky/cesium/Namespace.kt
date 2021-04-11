@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Namespace(
-    source: Definition
+    source: Definition,
 ) : TypeBase(source) {
     var parentName: String? = null
 

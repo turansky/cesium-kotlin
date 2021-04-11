@@ -32,7 +32,7 @@ private val MULTI_TYPES = listOf(
 
 internal data class Definition(
     private val doc: String,
-    val body: String
+    val body: String,
 ) {
     var docBody: String? = null
 
@@ -45,7 +45,7 @@ internal data class Definition(
 
     fun doc(
         link: DocLink? = null,
-        hideParams: Boolean = false
+        hideParams: Boolean = false,
     ): String =
         if (docBody != null) {
             kdoc(docBody!!, null)
@@ -70,7 +70,7 @@ internal data class Definition(
 }
 
 internal fun parseTopDefinition(
-    data: String
+    data: String,
 ): Sequence<Definition> {
     val source = data.trim().removeSuffix(";")
 
@@ -107,7 +107,7 @@ private fun Definition.flatten(): Sequence<Definition> {
 
 private fun newBodies(
     body: String,
-    multiType: String
+    multiType: String,
 ): Sequence<String> {
     val optionalMultiType = "?: $multiType"
     if (optionalMultiType !in body)

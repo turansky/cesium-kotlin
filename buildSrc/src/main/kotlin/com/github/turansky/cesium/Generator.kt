@@ -14,7 +14,7 @@ private const val MODULE_ANNOTATION: String = """@file:JsModule("cesium")"""
 internal fun generateKotlinDeclarations(
     definitionsFile: File,
     sourceDir: File,
-    nonModular: Boolean
+    nonModular: Boolean,
 ) {
     nonModularMode = nonModular
 

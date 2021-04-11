@@ -8,7 +8,7 @@ private const val MEMBER_TEMPLATE = "$DOC_ROOT/{type}.html#{member}"
 internal class DocLink
 private constructor(
     val href: String,
-    val typeMode: Boolean = false
+    val typeMode: Boolean = false,
 ) {
     constructor(enum: IEnum)
             : this(GLOBAL_TEMPLATE.replace("{enum}", enum.docName))

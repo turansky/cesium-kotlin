@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Enum(
-    override val source: Definition
+    override val source: Definition,
 ) : Declaration(), IEnum {
     override val name: String =
         source.defaultName
@@ -42,7 +42,7 @@ internal class Enum(
 // TODO: describe value in comments
 internal class EnumConstant(
     override val source: Definition,
-    private val parent: Enum
+    private val parent: Enum,
 ) : Declaration() {
     override val name: String =
         source.body.split(" = ")[0]

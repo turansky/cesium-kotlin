@@ -43,7 +43,7 @@ private val MEMBER_REGEX = Regex("""[A-Z]\w+\.\w+""")
 internal fun kdocBody(
     doc: String,
     hideParams: Boolean,
-    hideOptions: Boolean
+    hideOptions: Boolean,
 ): String {
     if (doc.isEmpty())
         return ""
@@ -84,7 +84,7 @@ internal fun kdocBody(
 
 internal fun kdoc(
     body: String,
-    link: DocLink?
+    link: DocLink?,
 ): String {
     if (body.isEmpty())
         return ""
@@ -138,7 +138,7 @@ private fun listItems(source: String): String =
 private fun formatBlocks(
     source: String,
     hideParams: Boolean,
-    hideOptions: Boolean
+    hideOptions: Boolean,
 ): String =
     KDOC_KEYWORDS
         .fold(source) { acc, keyword ->
@@ -154,7 +154,7 @@ private fun formatBlocks(
 private fun formatBlock(
     source: String,
     hideParams: Boolean,
-    hideOptions: Boolean
+    hideOptions: Boolean,
 ): String? =
     when {
         source.startsWith("@example") -> source.removePrefix("@example\n").let { "```\n${cleanupCode(it)}\n```" }
@@ -175,7 +175,7 @@ private fun formatBlock(
 
 private fun formatParam(
     source: String,
-    prefix: String
+    prefix: String,
 ): String {
     val body = source.removePrefix(prefix)
 
@@ -264,7 +264,7 @@ private fun formatDefaultValue(source: String): String {
 }
 
 private fun String.multiline(
-    vararg additionalLines: String
+    vararg additionalLines: String,
 ): String =
     splitToSequence("\n")
         .plus(additionalLines)

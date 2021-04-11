@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class NestedNamespace(
-    override val source: Definition
+    override val source: Definition,
 ) : Member() {
     override val name: String =
         source.defaultName

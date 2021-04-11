@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Parameter(
-    body: String
+    body: String,
 ) {
     val name: String = body.substringBefore(": ")
         .removePrefix("...")

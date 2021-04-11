@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal fun String.count(
-    substring: String
+    substring: String,
 ): Int {
     var index = 0
     var count = 0

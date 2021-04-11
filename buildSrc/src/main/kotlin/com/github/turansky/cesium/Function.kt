@@ -1,7 +1,7 @@
 package com.github.turansky.cesium
 
 internal class Function(
-    override val source: Definition
+    override val source: Definition,
 ) : Declaration(), ITop {
     override val name = source.parseFunctionName()
 
