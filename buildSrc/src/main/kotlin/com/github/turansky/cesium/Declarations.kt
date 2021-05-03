@@ -127,7 +127,6 @@ private fun readDeclarations(
     definitionsFile: File,
 ): List<Declaration> =
     definitionsFile.readText()
-        .replace("\n}/**", "\n}\n\n/**")
         .removePrefix("""declare module "cesium" {""")
         .substringBefore("\n\n\n\n}")
         .replace("($TS_FUNCTION)", JS_FUNCTION)
@@ -136,7 +135,6 @@ private fun readDeclarations(
         .replace("[webAssemblyOptions", "[options")
         .replace("(webAssemblyOptions", "(options")
         .replace("The DOM element or ID", "The DOM element")
-        .applyCorrection80()
         .applyTypeAliasCorrection()
         .splitToSequence("\n\n/**")
         .filter { it.isNotBlank() }
@@ -159,32 +157,3 @@ private fun String.applyTypeAliasCorrection(): String =
         .replace("TimeInterval.MergeCallback", "MergeCallback")
         .replace("EasingFunction.Callback", "EasingCallback")
         .replace("CallbackProperty.Callback", "CallbackPropertyCallback")
-
-// WA for https://github.com/CesiumGS/cesium/issues/9465
-private fun String.applyCorrection80(): String {
-    var correctionMode = false
-    var correction = ""
-
-    return splitToSequence("\n")
-        .map { s ->
-            val t = s.trim()
-            if (correctionMode) {
-                when {
-                    t.startsWith("*/") -> {
-                        correctionMode = false
-                        s
-                    }
-                    t.startsWith("*") -> s
-                    else -> s.replaceFirst(correction, "$correction * ")
-                }
-            } else {
-                if (t.startsWith("/**")) {
-                    correction = s.substringBefore("/**")
-                    correctionMode = true
-                }
-
-                s
-            }
-        }
-        .joinToString("\n")
-}
