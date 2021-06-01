@@ -66,7 +66,7 @@ internal fun parseDeclarations(
 
     // TODO: remove temp hack
     declarations.removeAll {
-        it.name == "DictionaryLike"
+        it.name == "DictionaryLike" || it.name == "HilbertOrder"
     }
 
     declarations.removeAll {
