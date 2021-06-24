@@ -11,7 +11,7 @@ Add `cesium-kotlin` dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.github.turansky.cesium:cesium-kotlin:1.82.1-10")
+    implementation("com.github.turansky.cesium:cesium-kotlin:1.82.1-20")
 }
 ```
 
