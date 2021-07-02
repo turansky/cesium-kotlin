@@ -140,6 +140,7 @@ private fun readDeclarations(
         .filter { it.isNotBlank() }
         .map { "/**$it" }
         .flatMap { it.split("\n\nexport ").asSequence() }
+        .map { it.applyTerrainProviderWorkaround() }
         .flatMap { parseTopDefinition(it) }
         .map { source ->
             val body = source.body
@@ -157,3 +158,18 @@ private fun String.applyTypeAliasCorrection(): String =
         .replace("TimeInterval.MergeCallback", "MergeCallback")
         .replace("EasingFunction.Callback", "EasingCallback")
         .replace("CallbackProperty.Callback", "CallbackPropertyCallback")
+
+private const val TERRAIN_PROVIDER_WA = """
+    /**
+     *
+     */
+    readonly availability: TileAvailability;"""
+
+// TODO: report
+private fun String.applyTerrainProviderWorkaround(): String =
+    if ("class CustomHeightmapTerrainProvider" in this) {
+        replace(
+            "    readonly hasVertexNormals: boolean;",
+            "    readonly hasVertexNormals: boolean;$TERRAIN_PROVIDER_WA"
+        ).also { println(it) }
+    } else this
