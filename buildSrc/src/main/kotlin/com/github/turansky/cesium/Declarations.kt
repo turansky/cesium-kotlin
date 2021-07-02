@@ -171,5 +171,5 @@ private fun String.applyTerrainProviderWorkaround(): String =
         replace(
             "    readonly hasVertexNormals: boolean;",
             "    readonly hasVertexNormals: boolean;$TERRAIN_PROVIDER_WA"
-        ).also { println(it) }
+        )
     } else this
