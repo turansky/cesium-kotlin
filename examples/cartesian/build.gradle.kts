@@ -3,5 +3,5 @@ plugins {
 }
 
 dependencies {
-    implementation("com.github.turansky.cesium:cesium-kotlin:1.82.1-20")
+    implementation("com.github.turansky.cesium:cesium-kotlin:1.84.0-10")
 }
