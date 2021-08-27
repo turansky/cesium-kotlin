@@ -10,6 +10,12 @@ pluginManagement {
     }
 }
 
+dependencyResolutionManagement {
+    repositories {
+        mavenCentral()
+    }
+}
+
 include("cesium-kotlin")
 include("cesium-kotlin-nm")
 
