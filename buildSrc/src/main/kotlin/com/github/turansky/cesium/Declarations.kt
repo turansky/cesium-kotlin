@@ -142,6 +142,8 @@ private fun readDeclarations(
         .flatMap { it.split("\n\nexport ").asSequence() }
         .map { it.applyTerrainProviderWorkaround() }
         .flatMap { parseTopDefinition(it) }
+        // TODO: support
+        .filter { !it.body.startsWith("export var ") }
         .map { source ->
             val body = source.body
             val prefix = FACTORY_MAP.keys
